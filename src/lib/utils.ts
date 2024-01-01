@@ -9,7 +9,18 @@ export function cn(...inputs: ClassValue[]) {
 
 export const apiPath = {
   categories:{
-    all:"category/getall"
+    all:"category/getall",
+    product:"product/product",
+    
+  },
+  color:{
+    all:"color/fetch"
+  },
+  cuts:{
+    all:"cut/fetch"
+  },
+  clarity:{
+    all:"clarity/fetch"
   }
 }
 

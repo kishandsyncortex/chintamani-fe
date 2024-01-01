@@ -13,13 +13,14 @@ import { faSearch, faUser } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 import api from "@/services/api";
 import { apiPath } from "@/lib/utils";
-import { Category } from "@/lib/interfaces/category";
+import { Category, subCategory } from "@/lib/interfaces/category";
+import { useDispatch } from "react-redux";
+import { setCategory } from "@/redux/reducer/category";
 
 const Header: FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [categories, setCategories] = useState([]);
-  console.log("🚀 ~ file: Header.tsx:20 ~ categories:", categories)
-
+  const dispatch = useDispatch()
   useEffect(() => {
     const handleScroll = () => {
       const scrollTop = window.scrollY;
@@ -195,105 +196,50 @@ const Header: FC = () => {
                         </li>
                         {categories?.map((category: Category) => {
                           return (
-                            <li className="relative group list-none flex flex-col">
+                            <li className="relative group list-none flex flex-col" onClick={()=>category?.subCategories?.length ? {}:dispatch(setCategory([{path:category?.name,id:category?.id,name:"categoryid"}]))}>
                               <Link
-                                to={""}
-                                className="group-hover:bg-[#eee] group-hover:border-t-[3px] group-hover:border-[#211c50] py-5 px-[15px] text-sm text-[#211c50] font-normal border-t-[3px] border-transparent after:w-[0.35em] after:h-[0.35em] after:border-r-[0.1em] after:border-t-[0.1em] after:rotate-[135deg] flex items-center after:border-[#211c50] after:ml-[0.5em] hover:visible hover:opacity-[1]"
+                                to={category?.subCategories?.length ? "":"/product-category"}
+                                className={`group-hover:bg-[#eee] group-hover:border-t-[3px] group-hover:border-[#211c50] py-5 px-[15px] text-sm text-[#211c50] font-normal border-t-[3px] border-transparent ${category?.subCategories?.length && "after:w-[0.35em] after:h-[0.35em] after:border-r-[0.1em] after:border-t-[0.1em] after:rotate-[135deg] after:border-[#211c50] after:ml-[0.5em] hover:visible hover:opacity-[1]"}  flex items-center `}
                               >
                                 {category?.name}
                               </Link>
 
-                              <ul className="group-hover:visible group-hover:opacity-[1] bg-[#eee] min-w-[270px] z-[2147483641] p-0 flex-col whitespace-nowrap invisible opacity-0 flex  absolute top-[100%]">
-                                <li className="flex flex-col list-none relative">
-                                  <Link
-                                    to={""}
-                                    className="border-0 py-5 px-[15px] font-semibold decoration-none flex items-center text-[#211c50] text-sm"
-                                  >
-                                    <img
-                                      src={neturalDiamnond}
-                                      alt="neturalDiamnond"
-                                      className="w-6 mr-[10px] align-middle"
-                                    />{" "}
-                                    Natural Diamonds
-                                  </Link>
-                                </li>
-                                <li className="flex flex-col list-none relative sub-group">
-                                  <Link
-                                    to={""}
-                                    className="border-0 py-5 px-[15px] text-sm decoration-none flex items-center text-[#211c50] after:w-[0.35em] after:h-[0.35em] after:border-r-[0.1em] after:border-t-[0.1em] after:rotate-[135deg] after:border-[#211c50] after:ml-[0.5em] hover:visible hover:opacity-[1] font-semibold"
-                                  >
-                                    <img
-                                      src={CVD}
-                                      alt="CVD"
-                                      className="w-6 mr-[10px] align-middle"
-                                    />{" "}
-                                    Lab Grown Diamonds
-                                  </Link>
-                                  <ul className="sub-group-hover:visible sub-group-hover:opacity-[1] bg-[#eee] min-w-[270px] z-[2147483641] p-0 flex-col whitespace-nowrap invisible opacity-0 flex  absolute top-[0] left-[100%]">
-                                    <li className="flex flex-col list-none relative">
+                              {category?.subCategories?.length ? <ul className="group-hover:visible group-hover:opacity-[1] bg-[#eee] min-w-[270px] z-[2147483641] p-0 flex-col whitespace-nowrap invisible opacity-0 flex  absolute top-[100%]">
+                            
+                                {category?.subCategories?.map((subCategory: subCategory) => {
+                                  return (
+                                    <li className="flex flex-col list-none relative sub-group" onClick={()=>subCategory?.innerCategories?.length ? {}:dispatch(setCategory([{path:category?.name,id:category?.id,name:"categoryid"},{path:subCategory?.name,id:subCategory?.id,name:"subCategoryid"}]))}>
                                       <Link
-                                        to={""}
-                                        className="border-0 py-5 px-[15px] font-semibold text-sm decoration-none flex items-center text-[#211c50]"
+                                        to={subCategory?.innerCategories?.length?"":"/product-category"}
+                                        className={`border-0 py-5 px-[15px] text-sm decoration-none flex items-center text-[#211c50] ${subCategory?.innerCategories?.length && "after:w-[0.35em] after:h-[0.35em] after:border-r-[0.1em] after:border-t-[0.1em] after:rotate-[135deg] after:border-[#211c50] after:ml-[0.5em] hover:visible hover:opacity-[1]"}  font-semibold`}
                                       >
-                                        {" "}
-                                        CVD Diamonds
+                                        <img
+                                          src={subCategory?.image?.[0]||CVD}
+                                          alt="CVD"
+                                          className="w-6 mr-[10px] align-middle"
+                                        />{" "}
+                                        {subCategory?.name}
                                       </Link>
+                                      <ul className={`sub-group-hover:visible sub-group-hover:opacity-[1] bg-[#eee] min-w-[270px] z-[2147483641] p-0 flex-col whitespace-nowrap invisible opacity-0 flex  absolute top-[0] left-[100%]`}>
+                                        {subCategory?.innerCategories?.map((innerCategory: subCategory) => {
+                                          return (
+                                            <li className="flex flex-col list-none relative" onClick={()=>dispatch(setCategory([{path:category?.name,id:category?.id,name:"categoryid"},{path:subCategory?.name,id:subCategory?.id,name:"subCategoryid"},{path:innerCategory?.name,id:innerCategory?.id,name:"innerCategoryid "}]))}>
+                                              <Link
+                                                to={"/product-category"}
+                                                className="border-0 py-5 px-[15px] font-semibold text-sm decoration-none flex items-center text-[#211c50]"
+                                              >
+                                                {innerCategory?.name}
+                                              </Link>
+                                            </li>
+
+                                          )
+                                        })}
+                                      </ul>
                                     </li>
-                                  </ul>
-                                </li>
-                                <li className="flex flex-col list-none relative">
-                                  <Link
-                                    to={""}
-                                    className="border-0 py-5 px-[15px] text-sm font-semibold decoration-none flex items-center text-[#211c50]"
-                                  >
-                                    <img
-                                      src={Fancy}
-                                      alt="Fancy"
-                                      className="w-6 mr-[10px] align-middle"
-                                    />{" "}
-                                    Fancy diamond
-                                  </Link>
-                                </li>
-                                <li className="flex flex-col list-none relative">
-                                  <Link
-                                    to={""}
-                                    className="border-0 py-5 px-[15px] text-sm font-semibold decoration-none flex items-center text-[#211c50]"
-                                  >
-                                    <img
-                                      src={Moissanite}
-                                      alt="Moissanite"
-                                      className="w-6 mr-[10px] align-middle"
-                                    />{" "}
-                                    Moissanite Diamonds
-                                  </Link>
-                                </li>
-                                <li className="flex flex-col list-none relative">
-                                  <Link
-                                    to={""}
-                                    className="border-0 py-5 px-[15px] text-sm font-semibold decoration-none flex items-center text-[#211c50]"
-                                  >
-                                    <img
-                                      src={Rough}
-                                      alt="Rough"
-                                      className="w-6 mr-[10px] align-middle"
-                                    />{" "}
-                                    Rough Diamond
-                                  </Link>
-                                </li>
-                                <li className="flex flex-col list-none relative">
-                                  <Link
-                                    to={""}
-                                    className="border-0 py-5 px-[15px] text-sm font-semibold decoration-none flex items-center text-[#211c50]"
-                                  >
-                                    <img
-                                      src={B1}
-                                      alt="Black"
-                                      className="w-6 mr-[10px] align-middle"
-                                    />{" "}
-                                    Black Diamonds
-                                  </Link>
-                                </li>
-                              </ul>
+                                  )
+                                })}
+                               
+                              </ul>:null}
                             </li>
 
                           )

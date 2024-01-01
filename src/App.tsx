@@ -22,7 +22,8 @@ import PearShape from "./components/diamondshape/PearShape";
 import MarquiseShape from "./components/diamondshape/MarquiseShape";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
+import { Provider } from 'react-redux'
+import { store } from "./redux/store";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -40,6 +41,10 @@ const router = createBrowserRouter([
     children: [
       {
         path: "shop",
+        element: <ShopItem />,
+      },
+      {
+        path: "product-category",
         element: <ShopItem />,
       },
       {
@@ -110,8 +115,12 @@ const App = () => {
   return (
     <>
       <ToastContainer />
+      <Provider store={store} >
       <RouterProvider router={router} />
       <ScrollToTopButton />
+
+      </Provider>
+
     </>
   );
 };

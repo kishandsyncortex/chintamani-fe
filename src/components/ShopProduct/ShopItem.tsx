@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Arrive from "../../../public/assests/Images/arrive1.png";
 import Yellow from "../../../public/assests/Images/yellow.png";
@@ -9,13 +9,70 @@ import MultiRangeSlider, { ChangeResult } from "multi-range-slider-react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import { Button } from "../ui/button";
+import { useDispatch, useSelector } from "react-redux";
+import api from "@/services/api";
+import { apiPath } from "@/lib/utils";
+import { breadCrumbType, diamondProperty } from "@/lib/interfaces/category";
+import { setCategory } from "@/redux/reducer/category";
 
 const ShopItem: FC = () => {
   const [minValue, setMinValue] = useState(0);
   const [maxValue, setMaxValue] = useState(0);
   const [minValue2, setMinValue2] = useState(0);
   const [maxValue2, setMaxValue2] = useState(0);
+  const [filter, setFilter] = useState<any>({});
+  const [products, setProducts] = useState([]);
+  const [colors, setColors] = useState([]);
+  const [cuts, setCuts] = useState([]);
+  const [clarities, setClarities] = useState([]);
+  const [totalRecords, setTotalRecords] = useState(0);
+  const [limit, setLimit] = useState(10);
+  const [currentPage, setCurrentPage] = useState(1);
 
+  const { category } = useSelector((state: any) => state?.category)
+  const dispatch = useDispatch()
+  console.log("🚀 ~ file: ShopItem.tsx:20 ~ category:", category)
+
+  const fetchProducts = async (id: string, name: string) => {
+    const data = await api({ method: "get", url: `${apiPath?.categories?.product}?${name?.toLowerCase()}=${id}` })
+    console.log("🚀 ~ file: ShopItem.tsx:30 ~ fetchProducts ~ data:", data)
+    setProducts(data?.data?.product)
+    setTotalRecords(data?.data?.total)
+  }
+
+  useEffect(() => {
+    getColors()
+    getCuts()
+    getClarity()
+  }, [])
+
+  const getColors = async () => {
+    const data = await api({ method: "get", url: `${apiPath?.color?.all}` })
+    setColors(data?.data?.Colordata)
+  }
+  const getCuts = async () => {
+    const data = await api({ method: "get", url: `${apiPath?.cuts?.all}` })
+    setCuts(data?.data?.Cutdata)
+  }
+  const getClarity = async () => {
+    const data = await api({ method: "get", url: `${apiPath?.clarity?.all}` })
+    setClarities(data?.data?.Claritydata)
+  }
+
+  useEffect(() => {
+    if (category?.length) {
+      let currCategory = category?.[category?.length - 1]
+      setFilter({[`${currCategory?.name?.toLowerCase()}`]:currCategory?.id})
+      fetchProducts(currCategory?.id, currCategory?.name)
+
+    }
+  }, [category])
+
+  const submitHandler = async (item: breadCrumbType, index: number) => {
+    dispatch(setCategory(category?.filter((_: any, i: number) => i <= index)))
+    fetchProducts(item?.id, item?.name)
+
+  }
   return (
     <>
       <section className="w-full">
@@ -27,10 +84,45 @@ const ShopItem: FC = () => {
                   <button className="text-sm font-poppins text-[#767676] font-semibold mr-1">
                     <Link to={"/"}>Home</Link>
                   </button>{" "}
-                  <span className="text-sm text-[#767676]">/</span>{" "}
+                  {category?.map((item: breadCrumbType, index: number) => {
+                    return (
+                      <>
+                        <span className="text-sm text-[#767676]">/</span>{" "}
+                        <button className="text-sm font-poppins text-[#767676] font-normal mr-1" onClick={() => submitHandler(item, index)}>
+                          {/* <Link to={category?.path1 ? "/" : ""}> */}
+                          {item?.path}
+
+                          {/* </Link> */}
+                        </button>
+                      </>
+                    )
+                  })}
+
+
+                  {category?.path1 ?
+                    <>
+                      <span className="text-sm text-[#767676]">/</span>{"  "}
+                      <button className="text-sm font-poppins text-[#767676] font-normal mr-1">
+                        <Link to={category?.path2 ? "/" : ""}>
+                          {category?.path1}
+
+                        </Link>
+                      </button>
+                    </> : null}
+                  {category?.path2 ?
+                    <>
+                      <span className="text-sm text-[#767676]">/</span>{" "}
+                      <button className="text-sm font-poppins text-[#767676] font-normal mr-1">
+                        <Link to={category?.path3 ? "/" : ""}>
+                          {category?.path2}
+
+                        </Link>
+                      </button>
+                    </> : null}
+                  {/* <span className="text-sm text-[#767676]">/</span>{" "}
                   <button className="text-sm font-poppins text-[#767676] font-normal">
                     Shop
-                  </button>
+                  </button> */}
                 </div>
                 <div className="py-[15px]  border-t-[1px] border-[#eee]">
                   <div>
@@ -83,27 +175,19 @@ const ShopItem: FC = () => {
                     <div className="mt-[20px] text-left text-[16px] text-[#000] font-poppins font-medium uppercasemb mb-[15px]">
                       CLARITY
                     </div>
-                    <div className="flex gap-[5px]">
-                      <Button
-                        variant={"outline"}
-                        className="border-[#211c50] hover:bg-[#211c50] hover:text-[#fff] text-[#211c50] w-[97px] py-[8px] px-[16px]"
-                      >
-                        IF
-                      </Button>
-                      <Button
-                        variant={"outline"}
-                        className="border-[#211c50] hover:bg-[#211c50] hover:text-[#fff] text-[#211c50] py-[8px] px-[16px] w-[97px]"
-                      >
-                        S11
-                      </Button>
-                      <Button
-                        variant={"outline"}
-                        className="border-[#211c50] hover:bg-[#211c50] hover:text-[#fff] text-[#211c50] py-[8px] px-[16px] w-[97px]"
-                      >
-                        S12
-                      </Button>
+                    <div className="grid grid-cols-3 gap-[5px]">
+                      {clarities?.map((clarity: diamondProperty) => {
+                        return <Button
+                        onClick={()=>setFilter({...filter,Clarity:[...filter?.Clarity||[],clarity?.id]})}
+                          variant={"outline"}
+                          className="border-[#211c50] hover:bg-[#211c50] hover:text-[#fff] text-[#211c50] w-[97px] py-[8px] px-[16px]"
+                        >
+                          {clarity?.name}
+                        </Button>
+                      })}
+
                     </div>
-                    <div className="flex gap-[5px] mt-[10px]">
+                    {/* <div className="flex gap-[5px] mt-[10px]">
                       <Button
                         variant={"outline"}
                         className="border-[#211c50] hover:bg-[#211c50] hover:text-[#fff] text-[#211c50] w-[97px] py-[8px] px-[16px]"
@@ -130,7 +214,7 @@ const ShopItem: FC = () => {
                       >
                         VVS2
                       </Button>
-                    </div>
+                    </div> */}
                   </div>
                 </div>
                 <div className="py-[15px] border-b-[1px] border-[#eee]">
@@ -138,25 +222,17 @@ const ShopItem: FC = () => {
                     <div className="mt-[20px] text-left text-[16px] text-[#000] font-poppins font-medium uppercasemb mb-[15px]">
                       CUT
                     </div>
-                    <div className="flex gap-[5px]">
-                      <Button
-                        variant={"outline"}
-                        className="border-[#211c50] hover:bg-[#211c50] hover:text-[#fff] text-[#211c50] w-[97px] py-[8px] px-[16px]"
-                      >
-                        EX
-                      </Button>
-                      <Button
-                        variant={"outline"}
-                        className="border-[#211c50] hover:bg-[#211c50] hover:text-[#fff] text-[#211c50] py-[8px] px-[16px] w-[97px]"
-                      >
-                        IDEL
-                      </Button>
-                      <Button
-                        variant={"outline"}
-                        className="border-[#211c50] hover:bg-[#211c50] hover:text-[#fff] text-[#211c50] py-[8px] px-[16px] w-[97px]"
-                      >
-                        VG
-                      </Button>
+                    <div className="grid grid-cols-3 gap-[5px]">
+                      {cuts?.map((cut: diamondProperty) => {
+                        return <Button
+                        onClick={()=>setFilter({...filter,Cuts:[...filter?.Cuts||[],cut?.id]})}
+                          variant={"outline"}
+                          className="border-[#211c50] hover:bg-[#211c50] hover:text-[#fff] text-[#211c50] w-[97px] py-[8px] px-[16px]"
+                        >
+                          {cut?.name}
+                        </Button>
+                      })}
+
                     </div>
                   </div>
                 </div>
@@ -165,78 +241,20 @@ const ShopItem: FC = () => {
                     <div className="mt-[20px] text-left text-[16px] text-[#000] font-poppins font-medium uppercasemb mb-[15px]">
                       COLOR
                     </div>
-                    <div className="flex gap-[5px]">
-                      <Button
-                        variant={"outline"}
-                        className="border-[#211c50] hover:bg-[#211c50] hover:text-[#fff] text-[#211c50] w-[58px] py-[8px] px-[16px]"
-                      >
-                        D
-                      </Button>
-                      <Button
-                        variant={"outline"}
-                        className="border-[#211c50] hover:bg-[#211c50] hover:text-[#fff] text-[#211c50] py-[8px] px-[16px] w-[58px]"
-                      >
-                        E
-                      </Button>
-                      <Button
-                        variant={"outline"}
-                        className="border-[#211c50] hover:bg-[#211c50] hover:text-[#fff] text-[#211c50] py-[8px] px-[16px] w-[58px]"
-                      >
-                        F
-                      </Button>
-                      <Button
-                        variant={"outline"}
-                        className="border-[#211c50] hover:bg-[#211c50] hover:text-[#fff] text-[#211c50] py-[8px] px-[16px] w-[58px]"
-                      >
-                        FA
-                      </Button>
+                    <div className="grid grid-cols-4 gap-[5px]">
+                      {colors?.map((color: diamondProperty) => {
+                        return <Button
+                          variant={"outline"}
+                          className="border-[#211c50] hover:bg-[#211c50] hover:text-[#fff] text-[#211c50] w-[58px] py-[8px] px-[16px]"
+                        >
+                          {color?.name}
+
+                        </Button>
+                      })}
+                     
                     </div>
-                    <div className="flex gap-[5px] mt-[10px]">
-                      <Button
-                        variant={"outline"}
-                        className="border-[#211c50] hover:bg-[#211c50] hover:text-[#fff] text-[#211c50] w-[58px] py-[8px] px-[16px]"
-                      >
-                        FIP
-                      </Button>
-                      <Button
-                        variant={"outline"}
-                        className="border-[#211c50] hover:bg-[#211c50] hover:text-[#fff] text-[#211c50] py-[8px] px-[16px] w-[58px]"
-                      >
-                        FVB
-                      </Button>
-                      <Button
-                        variant={"outline"}
-                        className="border-[#211c50] hover:bg-[#211c50] hover:text-[#fff] text-[#211c50] py-[8px] px-[16px] w-[58px]"
-                      >
-                        FVP
-                      </Button>
-                      <Button
-                        variant={"outline"}
-                        className="border-[#211c50] hover:bg-[#211c50] hover:text-[#fff] text-[#211c50] py-[8px] px-[16px] w-[58px]"
-                      >
-                        G
-                      </Button>
-                    </div>
-                    <div className="flex gap-[5px] mt-[10px]">
-                      <Button
-                        variant={"outline"}
-                        className="border-[#211c50] hover:bg-[#211c50] hover:text-[#fff] text-[#211c50] w-[58px] py-[8px] px-[16px]"
-                      >
-                        H
-                      </Button>
-                      <Button
-                        variant={"outline"}
-                        className="border-[#211c50] hover:bg-[#211c50] hover:text-[#fff] text-[#211c50] py-[8px] px-[16px] w-[58px]"
-                      >
-                        I
-                      </Button>
-                      <Button
-                        variant={"outline"}
-                        className="border-[#211c50] hover:bg-[#211c50] hover:text-[#fff] text-[#211c50] py-[8px] px-[16px] w-[58px]"
-                      >
-                        J
-                      </Button>
-                    </div>
+                  
+
                   </div>
                 </div>
               </div>
@@ -253,7 +271,7 @@ const ShopItem: FC = () => {
                     Shop
                   </h1>
                   <span className="text-xs font-poppins">
-                    showing 1-16 of 187 results
+                    showing {limit * currentPage - 9}-{limit * currentPage < totalRecords ? limit * currentPage : totalRecords} of {totalRecords} results
                   </span>
                 </div>
                 <div className="font-arial text-xs text-left cursor-pointer overflow-hidden w-[198px] leading-0 mr-3">
@@ -275,26 +293,30 @@ const ShopItem: FC = () => {
 
               <div className="">
                 <ul className="p-0 list-none clear-both after:table flex items-center flex-wrap gap-[3.5rem] cursor-pointer mb-[75px]">
-                  <li className="max-w-full sm:max-w-[20%] float-left relative ml-0 bg-[#f1f1f1] rounded-[20px]">
-                    <div className="flex text-center items-center flex-col relative rounded-t-lg overflow-hidden p-0 h-full decoration-none text-[#211c50] font-semibold">
-                      <img
-                        src={RoundedDiamond}
-                        alt="RoundedDiamond"
-                        className="w-full block shadow-none  h-[250px]"
-                      />
-                    </div>
-                    <div className="my-3 ml-3 border-b-[1px]">
-                      <div className="text-[16px] font-bold text-[#211c50]">
-                        Product Name
-                      </div>
-                      <div className="text-yellow-800">$420.31</div>
-                    </div>
-                    <div className="mb-3 mx-3 flex items-center justify-between">
-                      <FontAwesomeIcon icon={faHeart} />
-                      <button>add to cart</button>
-                    </div>
-                  </li>
-                  <li className="max-w-full sm:max-w-[20%] float-left relative ml-0 bg-[#f1f1f1] rounded-[20px]">
+                  {
+                    products?.map((product: any) => {
+                      return <li className="max-w-full sm:max-w-[20%] float-left relative ml-0 bg-[#f1f1f1] rounded-[20px]">
+                        <div className="flex text-center items-center flex-col relative rounded-t-lg overflow-hidden p-0 h-full decoration-none text-[#211c50] font-semibold">
+                          <img
+                            src={RoundedDiamond}
+                            alt="RoundedDiamond"
+                            className="w-full block shadow-none  h-[250px]"
+                          />
+                        </div>
+                        <div className="my-3 ml-3 border-b-[1px]">
+                          <div className="text-[16px] font-bold text-[#211c50]">
+                            {product?.title}
+                          </div>
+                          <div className="text-yellow-800">${product?.price}</div>
+                        </div>
+                        <div className="mb-3 mx-3 flex items-center justify-between">
+                          <FontAwesomeIcon icon={faHeart} />
+                          <button>add to cart</button>
+                        </div>
+                      </li>
+                    })
+                  }
+                  {/* <li className="max-w-full sm:max-w-[20%] float-left relative ml-0 bg-[#f1f1f1] rounded-[20px]">
                     <div className="flex text-center items-center flex-col relative rounded-t-lg overflow-hidden p-0 h-full decoration-none text-[#211c50] font-semibold">
                       <img
                         src={Yellow}
@@ -432,7 +454,7 @@ const ShopItem: FC = () => {
                       <FontAwesomeIcon icon={faHeart} />
                       <button>add to cart</button>
                     </div>
-                  </li>
+                  </li> */}
                 </ul>
                 <nav
                   aria-label="Page navigation"
