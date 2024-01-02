@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import J1 from "../../../public/assests/Images/j-1.jpg";
 import J2 from "../../../public/assests/Images/j-2.jpg";
@@ -7,12 +7,73 @@ import Crown from "../../../public/assests/Images/crown.png";
 import MultiRangeSlider, { ChangeResult } from "multi-range-slider-react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
+import { useDispatch, useSelector } from "react-redux";
+import { apiPath } from "@/lib/api-path";
+import api from "@/services/api";
+import { breadCrumbType } from "@/lib/interfaces/category";
+import { setCategory } from "@/redux/reducer/category";
 
 const JewelleryProduct: FC = () => {
   const [minValue, setMinValue] = useState(0);
   const [maxValue, setMaxValue] = useState(0);
   const [minValue2, setMinValue2] = useState(0);
   const [maxValue2, setMaxValue2] = useState(0);
+
+
+
+  const [filter, setFilter] = useState<any>({});
+  const [products, setProducts] = useState([]);
+  const [colors, setColors] = useState([]);
+  const [cuts, setCuts] = useState([]);
+  const [clarities, setClarities] = useState([]);
+  const [totalRecords, setTotalRecords] = useState(0);
+  const [limit, setLimit] = useState(10);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const { category } = useSelector((state: any) => state?.category)
+  const dispatch = useDispatch()
+  console.log("🚀 ~ file: ShopItem.tsx:20 ~ category:", category)
+
+  const fetchProducts = async (id: string, name: string) => {
+    const data = await api({ method: "get", url: `${apiPath?.categories?.product}?${name?.toLowerCase()}=${id}` })
+    setProducts(data?.data?.product)
+    setTotalRecords(data?.data?.total)
+  }
+
+  useEffect(() => {
+    getColors()
+    getCuts()
+    getClarity()
+  }, [])
+
+  const getColors = async () => {
+    const data = await api({ method: "get", url: `${apiPath?.color?.all}` })
+    setColors(data?.data?.Colordata)
+  }
+  const getCuts = async () => {
+    const data = await api({ method: "get", url: `${apiPath?.cuts?.all}` })
+    setCuts(data?.data?.Cutdata)
+  }
+  const getClarity = async () => {
+    const data = await api({ method: "get", url: `${apiPath?.clarity?.all}` })
+    setClarities(data?.data?.Claritydata)
+  }
+
+  useEffect(() => {
+    if (category?.length) {
+      let currCategory = category?.[category?.length - 1]
+      setFilter({[`${currCategory?.name?.toLowerCase()}`]:currCategory?.id})
+      fetchProducts(currCategory?.id, currCategory?.name)
+
+    }
+  }, [category])
+
+  const submitHandler = async (item: breadCrumbType, index: number) => {
+    dispatch(setCategory(category?.filter((_: any, i: number) => i <= index)))
+    fetchProducts(item?.id, item?.name)
+
+  }
+
   return (
     <section className="w-full">
       <div className="flex flex-col items-start">

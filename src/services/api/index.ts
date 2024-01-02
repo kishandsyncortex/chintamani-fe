@@ -1,4 +1,4 @@
-import { showToast } from "@/lib/utils";
+import { showErrorToast, showToast } from "@/lib/utils";
 import axios, { AxiosError } from "axios";
 
 export const BASE_URL = import.meta.env.VITE_API_BASE_URL
@@ -66,7 +66,7 @@ const api = async ({
         }
     }).catch(err => {
         console.log("🚀 ~ file: index.ts:68 ~ returninstance.request ~ err:", err)
-        showToast(err?.message)
+        showErrorToast(err?.response?.data?.message||err?.message)
     });
 };
 

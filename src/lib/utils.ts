@@ -6,24 +6,31 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-
-export const apiPath = {
-  categories:{
-    all:"category/getall",
-    product:"product/product",
-    
-  },
-  color:{
-    all:"color/fetch"
-  },
-  cuts:{
-    all:"cut/fetch"
-  },
-  clarity:{
-    all:"clarity/fetch"
-  }
-}
-
 export const showToast =(msg:string) => {
   toast(msg);
+}
+export const showErrorToast =(msg:string) => {
+  toast.error(msg);
+}
+
+export const convertObjectToURL = (obj: any) => {
+  return Object.entries(obj)
+  .map(([key, value]) => {
+    if (Array.isArray(value)) {
+      // If the property is an array, format it as an array in the string
+      return `${key}=${JSON.stringify(value)}`;
+    } else {
+      // Otherwise, include the property as key=value
+      return `${key}=${value}`;
+    }
+  })
+  .join('&');
+//   let urlString = "";
+//   for (let key in obj) {
+//     if (obj.hasOwnProperty(key)) {
+//         urlString += key + "=" + obj[key] + "&";
+//     }
+// }
+
+// return  urlString.slice(0, -1);
 }

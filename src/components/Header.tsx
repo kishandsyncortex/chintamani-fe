@@ -12,7 +12,7 @@ import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
 import { faSearch, faUser } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 import api from "@/services/api";
-import { apiPath } from "@/lib/utils";
+import { apiPath } from "@/lib/api-path";
 import { Category, subCategory } from "@/lib/interfaces/category";
 import { useDispatch } from "react-redux";
 import { setCategory } from "@/redux/reducer/category";
@@ -157,7 +157,7 @@ const Header: FC = () => {
         <div className="hidden w-full"></div>
       </header>
       {isScrolled && (
-        <header className="fixed top-0 left-0 right-0 z-[2147483640] bg-[#fff]">
+        <header className="fixed top-0 left-0 right-0 z-[1] bg-[#fff]">
           <div className="block w-full">
             <div className="container h-full flex flex-nowrap justify-start items-stretch">
               <div className="flex items-center justify-start">
@@ -196,25 +196,25 @@ const Header: FC = () => {
                         </li>
                         {categories?.map((category: Category) => {
                           return (
-                            <li className="relative group list-none flex flex-col" onClick={()=>category?.subCategories?.length ? {}:dispatch(setCategory([{path:category?.name,id:category?.id,name:"categoryid"}]))}>
+                            <li className="relative group list-none flex flex-col" onClick={() => category?.subCategories?.length ? {} : dispatch(setCategory([{ path: category?.name, id: category?.id, name: "categoryid" }]))}>
                               <Link
-                                to={category?.subCategories?.length ? "":"/product-category"}
+                                to={category?.subCategories?.length ? "" : "/product-category"}
                                 className={`group-hover:bg-[#eee] group-hover:border-t-[3px] group-hover:border-[#211c50] py-5 px-[15px] text-sm text-[#211c50] font-normal border-t-[3px] border-transparent ${category?.subCategories?.length && "after:w-[0.35em] after:h-[0.35em] after:border-r-[0.1em] after:border-t-[0.1em] after:rotate-[135deg] after:border-[#211c50] after:ml-[0.5em] hover:visible hover:opacity-[1]"}  flex items-center `}
                               >
                                 {category?.name}
                               </Link>
 
                               {category?.subCategories?.length ? <ul className="group-hover:visible group-hover:opacity-[1] bg-[#eee] min-w-[270px] z-[2147483641] p-0 flex-col whitespace-nowrap invisible opacity-0 flex  absolute top-[100%]">
-                            
+
                                 {category?.subCategories?.map((subCategory: subCategory) => {
                                   return (
-                                    <li className="flex flex-col list-none relative sub-group" onClick={()=>subCategory?.innerCategories?.length ? {}:dispatch(setCategory([{path:category?.name,id:category?.id,name:"categoryid"},{path:subCategory?.name,id:subCategory?.id,name:"subCategoryid"}]))}>
+                                    <li className="flex flex-col list-none relative sub-group" onClick={() => subCategory?.innerCategories?.length ? {} : dispatch(setCategory([{ path: category?.name, id: category?.id, name: "categoryid" }, { description: subCategory?.description, path: subCategory?.name, id: subCategory?.id, name: "subCategoryid" }]))}>
                                       <Link
-                                        to={subCategory?.innerCategories?.length?"":"/product-category"}
+                                        to={subCategory?.innerCategories?.length ? "" : "/product-category"}
                                         className={`border-0 py-5 px-[15px] text-sm decoration-none flex items-center text-[#211c50] ${subCategory?.innerCategories?.length && "after:w-[0.35em] after:h-[0.35em] after:border-r-[0.1em] after:border-t-[0.1em] after:rotate-[135deg] after:border-[#211c50] after:ml-[0.5em] hover:visible hover:opacity-[1]"}  font-semibold`}
                                       >
                                         <img
-                                          src={subCategory?.image?.[0]||CVD}
+                                          src={subCategory?.image?.[0] || CVD}
                                           alt="CVD"
                                           className="w-6 mr-[10px] align-middle"
                                         />{" "}
@@ -223,7 +223,7 @@ const Header: FC = () => {
                                       <ul className={`sub-group-hover:visible sub-group-hover:opacity-[1] bg-[#eee] min-w-[270px] z-[2147483641] p-0 flex-col whitespace-nowrap invisible opacity-0 flex  absolute top-[0] left-[100%]`}>
                                         {subCategory?.innerCategories?.map((innerCategory: subCategory) => {
                                           return (
-                                            <li className="flex flex-col list-none relative" onClick={()=>dispatch(setCategory([{path:category?.name,id:category?.id,name:"categoryid"},{path:subCategory?.name,id:subCategory?.id,name:"subCategoryid"},{path:innerCategory?.name,id:innerCategory?.id,name:"innerCategoryid "}]))}>
+                                            <li className="flex flex-col list-none relative" onClick={() => dispatch(setCategory([{ path: category?.name, id: category?.id, name: "categoryid" }, { path: subCategory?.name, id: subCategory?.id, name: "subCategoryid" }, { path: innerCategory?.name, id: innerCategory?.id, name: "innerCategoryid ", description: innerCategory?.description, }]))}>
                                               <Link
                                                 to={"/product-category"}
                                                 className="border-0 py-5 px-[15px] font-semibold text-sm decoration-none flex items-center text-[#211c50]"
@@ -238,8 +238,8 @@ const Header: FC = () => {
                                     </li>
                                   )
                                 })}
-                               
-                              </ul>:null}
+
+                              </ul> : null}
                             </li>
 
                           )

@@ -11,7 +11,7 @@ import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import { Button } from "../ui/button";
 import { useDispatch, useSelector } from "react-redux";
 import api from "@/services/api";
-import { apiPath } from "@/lib/utils";
+import { apiPath } from "@/lib/api-path";
 import { breadCrumbType, diamondProperty } from "@/lib/interfaces/category";
 import { setCategory } from "@/redux/reducer/category";
 
@@ -35,7 +35,6 @@ const ShopItem: FC = () => {
 
   const fetchProducts = async (id: string, name: string) => {
     const data = await api({ method: "get", url: `${apiPath?.categories?.product}?${name?.toLowerCase()}=${id}` })
-    console.log("🚀 ~ file: ShopItem.tsx:30 ~ fetchProducts ~ data:", data)
     setProducts(data?.data?.product)
     setTotalRecords(data?.data?.total)
   }
@@ -69,7 +68,7 @@ const ShopItem: FC = () => {
   }, [category])
 
   const submitHandler = async (item: breadCrumbType, index: number) => {
-    dispatch(setCategory(category?.filter((_: any, i: number) => i <= index)))
+  
     fetchProducts(item?.id, item?.name)
 
   }

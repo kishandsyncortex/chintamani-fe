@@ -1,6 +1,6 @@
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, Navigate, RouterProvider } from "react-router-dom";
 import ShopItem from "./components/ShopProduct/ShopItem";
 import RootLayout from "./components/layout/RootLayout";
 import Home from "./components/Home";
@@ -14,7 +14,7 @@ import ScrollToTopButton from "./components/ScrollToTop/ScrollToTopButton";
 import RoundShape from "./components/diamondshape/RoundShape";
 import PrincessShape from "./components/diamondshape/PrincessShape";
 import CushionShape from "./components/diamondshape/CushionShape";
-import OvalShape from "./components/diamondshape/OvalShape";
+import OvalShape from "./components/common/Diamonds";
 import EmeraldShape from "./components/diamondshape/EmeraldShape";
 import HeartShape from "./components/diamondshape/HeartShape";
 import RadiantShape from "./components/diamondshape/RadiantShape";
@@ -22,8 +22,36 @@ import PearShape from "./components/diamondshape/PearShape";
 import MarquiseShape from "./components/diamondshape/MarquiseShape";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { Provider } from 'react-redux'
-import { store } from "./redux/store";
+import { Provider, useSelector } from 'react-redux'
+import { persistor, store } from "./redux/store";
+import { PersistGate } from 'redux-persist/integration/react'
+import Diamonds from "./components/common/Diamonds";
+import { showErrorToast, showToast } from "./lib/utils";
+import { FC, ReactNode, useEffect } from "react";
+import Login from "./pages/auth/login";
+
+
+
+interface ProtectedRouteProps {
+  children: ReactNode;
+  errorMessage?: string;
+}
+
+const ProtectedRoute: FC<ProtectedRouteProps> = ({
+  children,
+  errorMessage,
+}) => {
+  const { token } = useSelector((state: { auth: any; }) => state.auth);
+
+  if (!token) {
+    // setOpenSignin(true);
+    showErrorToast("Unauthorized");
+    return <Navigate to={"/login"} />;
+  }
+  return <>{children}</>;
+};
+
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -36,6 +64,10 @@ const router = createBrowserRouter([
     ],
   },
   {
+    path: "/login",
+    element: <Login />,
+  },
+  {
     path: "/",
     element: <RootLayout />,
     children: [
@@ -43,9 +75,10 @@ const router = createBrowserRouter([
         path: "shop",
         element: <ShopItem />,
       },
+
       {
         path: "product-category",
-        element: <ShopItem />,
+        element: <Diamonds />,
       },
       {
         path: "jewellery",
@@ -112,13 +145,16 @@ const router = createBrowserRouter([
 ]);
 
 const App = () => {
+
+  
   return (
     <>
       <ToastContainer />
       <Provider store={store} >
-      <RouterProvider router={router} />
-      <ScrollToTopButton />
-
+        <PersistGate loading={null} persistor={persistor}>
+          <RouterProvider router={router} />
+          <ScrollToTopButton />
+        </PersistGate>
       </Provider>
 
     </>
