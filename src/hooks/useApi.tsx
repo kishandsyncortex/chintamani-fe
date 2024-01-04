@@ -1,10 +1,8 @@
-import { showErrorToast, showToast } from "@/lib/utils";
-import { handleLogout } from "@/redux/reducer/auth";
-import axios, { AxiosError } from "axios";
-import { useDispatch } from "react-redux";
-
-export const BASE_URL = import.meta.env.VITE_API_BASE_URL
-console.log("🚀 ~ file: index.ts:4 ~ BASE_URL:", BASE_URL)
+import { showErrorToast, showToast } from '@/lib/utils';
+import { handleLogout } from '@/redux/reducer/auth';
+import axios from 'axios';
+import React from 'react'
+import { useDispatch } from 'react-redux';
 
 interface AxiosParams {
     baseURL?: string;
@@ -15,8 +13,26 @@ interface AxiosParams {
     url: string;
     isFormData?: boolean;
 }
+export const BASE_URL = import.meta.env.VITE_API_BASE_URL
 
-const useApi = async ({
+
+const useApi = () => {
+    const dispatch = useDispatch()
+   
+
+    //   instance.interceptors.response.use(
+    //     (res) => {
+    //       return res;
+    //     },
+    //     (error: AxiosError) => {
+    //       const err: any = {
+    //         code: error.response?.status || 0,
+    //         data: error.response?.data,
+    //       };
+    //       return Promise.reject(err);
+    //     }
+    //   );
+const apiAction = ({
     baseURL = BASE_URL,
     headers = {},
     method = "get",
@@ -24,8 +40,7 @@ const useApi = async ({
     params,
     url,
     isFormData = false,
-}: AxiosParams) => {
-    const dispatch = useDispatch()
+}: AxiosParams)=>{
     const instance = axios.create({
         baseURL,
     });
@@ -47,20 +62,6 @@ const useApi = async ({
             "Content-Type": "multipart/form-data",
         };
     }
-
-    //   instance.interceptors.response.use(
-    //     (res) => {
-    //       return res;
-    //     },
-    //     (error: AxiosError) => {
-    //       const err: any = {
-    //         code: error.response?.status || 0,
-    //         data: error.response?.data,
-    //       };
-    //       return Promise.reject(err);
-    //     }
-    //   );
-
     return instance.request(config).then(data => {
         if (data?.status === 200) {
             return data?.data
@@ -75,6 +76,9 @@ const useApi = async ({
         }
         showErrorToast(err?.response?.data?.message||err?.message)
     });
-};
 
-export default useApi;
+} 
+return {apiAction}
+}
+
+export default useApi

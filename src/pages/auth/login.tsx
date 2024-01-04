@@ -1,3 +1,4 @@
+import useApi from '@/hooks/useApi'
 import { apiPath } from '@/lib/api-path'
 import { EMAIL_REGEX } from '@/lib/constant'
 import { handleLogin } from '@/redux/reducer/auth'
@@ -18,6 +19,8 @@ const Login = () => {
     const [error, setError] = useState<IError>({})
     const dispatch = useDispatch()
     const navigate = useNavigate()
+    const {apiAction} = useApi()
+    
     const handleSubmit = async () => {
         let err: IError = {}
         if (!email) {
@@ -34,7 +37,7 @@ const Login = () => {
             setError(err)
             return
         }
-        const data = await api({ method: "post", url: `${apiPath?.auth?.login}`, data: { email, password } })
+        const data = await apiAction({ method: "post", url: `${apiPath?.auth?.login}`, data: { email, password } })
         if (data) {
             dispatch(handleLogin(data?.data))
             navigate("/")

@@ -7,6 +7,9 @@ export const apiPath = {
     color:{
       all:"color/fetch"
     },
+    shape:{
+      all:"shape/fetch"
+    },
     cuts:{
       all:"cut/fetch"
     },
@@ -15,11 +18,20 @@ export const apiPath = {
     },
     product:{
       addWishlist:"whishlist/create",
+      removeWishlist:"whishlist/remove",
       addToCart:"cart/create",
-      allWishlist:"whishlist/fetch"
+      removeFromCart:"cart/remove",
+    },
+    user:{
+        allWishlist:"whishlist/fetch",
+        allCart:"cart/fetch",
+
     },
     auth:{
         login:"user/login"
+    },
+    contactUs:{
+      create:"contact/create"
     }
    
   }

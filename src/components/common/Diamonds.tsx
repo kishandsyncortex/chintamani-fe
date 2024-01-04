@@ -1,15 +1,13 @@
 import { useEffect, useState } from "react";
 import Sidebar from "./Sidebar";
 import ProductHeader from "./ProductHeader";
-import api from "@/services/api";
 import { convertObjectToURL } from "@/lib/utils";
 import { useDispatch, useSelector } from "react-redux";
 import ReactPaginate from 'react-paginate';
 import ProductList from "./ProductList";
 import { apiPath } from "@/lib/api-path";
-
-
-
+import useCheckPermission from "@/hooks/useCheckPermission";
+import useApi from "@/hooks/useApi";
 
 const Diamonds = () => {
   const [minValue, setMinValue] = useState(0);
@@ -22,8 +20,12 @@ const Diamonds = () => {
   const [filter, setFilter] = useState<any>({});
   console.log("🚀 ~ file: Diamonds.tsx:35 ~ Diamonds ~ filter:", filter)
   const [products, setProducts] = useState([]);
-  const { category } = useSelector((state: any) => state?.category)
+  const { category: { category } } = useSelector((state: any) => state)
   const dispatch = useDispatch()
+  const { token, user } = useCheckPermission()
+  console.log("🚀 ~ file: Diamonds.tsx:26 ~ Diamonds ~ token:", token)
+  console.log("🚀 ~ file: Diamonds.tsx:26 ~ Diamonds ~ user:", user)
+  const { apiAction } = useApi()
 
   useEffect(() => {
     if (category?.length) {
@@ -34,21 +36,26 @@ const Diamonds = () => {
     }
   }, [category])
 
+  
+  
   useEffect(() => {
     if (Object.keys(filter)?.length) {
       fetchProducts()
     }
   }, [filter])
+  
+
 
   const fetchProducts = async () => {
     let params = convertObjectToURL(filter)
     // debugger
-    const data = await api({ method: "get", url: `${apiPath?.categories?.product}?${params}` })
+    // const data = await useApi({ method: "get", url: `${apiPath?.categories?.product}?${params}` })
+    const data = await apiAction({ method: "get", url: `${apiPath?.categories?.product}?${params}` })
     // const data = await api({ method: "get", url: "product/product?subcategoryid=53eaeb3d-cf32-4ca5-9945-8e1dbd4bdf80&Clarity=['SI2']&Cuts=['IF']" })
     setProducts(data?.data?.product)
     setTotalRecords(data?.data?.total)
   }
-  
+
   return (
     <section className="w-full">
       <div className="pt-[35px] pb-[20px] flex flex-col items-start px-[20px] container">

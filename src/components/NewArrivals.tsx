@@ -1,11 +1,27 @@
-import { FC } from "react";
+import { FC, useEffect, useState } from "react";
 import K1 from "../../public/assests/Images/k1.png";
 import Arrive from "../../public/assests/Images/arrive1.png";
 import blackDImg from "../../public/assests/Images/blackD.png";
 import neklessImg from "../../public/assests/Images/nekless.png";
 import { Button } from "./ui/button";
+import useApi from "@/hooks/useApi";
+import { apiPath } from "@/lib/api-path";
+import { productType } from "@/lib/interfaces/category";
 
 const NewArrivals: FC = () => {
+const [latestProducts, setLatestProducts] = useState([])
+const { apiAction } = useApi()
+
+useEffect(() => {
+  getLatestProduct()
+}, [])
+
+const getLatestProduct =async () => {
+  const data = await apiAction({ method: "get", url: `${apiPath?.categories?.product}?sort=3` })
+  setLatestProducts(data?.data?.product)
+  console.log("🚀 ~ file: NewArrivals.tsx:21 ~ getLatestProduct ~ data:", data)
+}
+
   return (
     <section className="w-full">
       <div className="flex flex-col items-center py-[75px] px-[20px] container">
@@ -23,7 +39,26 @@ const NewArrivals: FC = () => {
           </h1>
           <div className="">
             <ul className="p-0 list-none clear-both after:table flex items-center flex-wrap justify-center gap-10 cursor-pointer">
-              <li className="max-w-full lg:w-[25%] md:w-[25%] float-left relative ml-0 bg-[#f1f1f1] rounded-[20px]">
+              {latestProducts?.map((product:productType)=>{
+                return (
+                  <li className="max-w-full lg:w-[25%] md:w-[25%] float-left relative ml-0 bg-[#f1f1f1]  rounded-[20px]">
+                    <div className="flex text-center items-center flex-col relative rounded-t-lg overflow-hidden p-0 h-full decoration-none text-[#211c50] font-semibold">
+                      <img
+                        src={product?.productimage?.[0]||''}
+                        alt="Arrive"
+                        className="w-full block shadow-none h-[250px]"
+                      />
+                    </div>
+                    <div className="my-3 ml-3">
+                      <div className="max-w-full overflow-hidden text-ellipsis whitespace-nowrap">{product?.title}</div>
+                      <div className="text-[#211c50] font-medium">
+                        <del>$440</del> ${product?.price}
+                      </div>
+                    </div>
+                  </li>
+                )
+              })}
+              {/* <li className="max-w-full lg:w-[25%] md:w-[25%] float-left relative ml-0 bg-[#f1f1f1] rounded-[20px]">
                 <div className="flex text-center items-center flex-col relative rounded-t-lg overflow-hidden p-0 h-full decoration-none text-[#211c50] font-semibold">
                   <img
                     src={Arrive}
@@ -82,7 +117,7 @@ const NewArrivals: FC = () => {
                     <del>$440</del> $420.31
                   </div>
                 </div>
-              </li>
+              </li> */}
             </ul>
           </div>
         </div>

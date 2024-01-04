@@ -1,26 +1,29 @@
 import { FC, useEffect, useState } from "react";
 import MainLogo from "../../public/assests/Images/main-logo.png";
 import LogoShape from "../../public/assests/Images/logo-shape.png";
-import neturalDiamnond from "../../public/assests/Images/netural-diamnond.png";
-import B1 from "../../public/assests/Images/b1.png";
-import Rough from "../../public/assests/Images/rough.png";
-import Moissanite from "../../public/assests/Images/90895_RI.png";
-import Fancy from "../../public/assests/Images/fancy-1.png";
+
 import CVD from "../../public/assests/Images/cvd.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
-import { faSearch, faUser } from "@fortawesome/free-solid-svg-icons";
-import { Link } from "react-router-dom";
+import { faCartShopping, faSearch, faUser } from "@fortawesome/free-solid-svg-icons";
+import { Link, useNavigate } from "react-router-dom";
 import api from "@/services/api";
 import { apiPath } from "@/lib/api-path";
 import { Category, subCategory } from "@/lib/interfaces/category";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setCategory } from "@/redux/reducer/category";
+import useApi from "@/hooks/useApi";
+import { handleLogout } from "@/redux/reducer/auth";
 
 const Header: FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [categories, setCategories] = useState([]);
+  const [menu, setMenu] = useState(false);
   const dispatch = useDispatch()
+  const { apiAction } = useApi()
+  const { user } = useSelector((state: { auth: any }) => state?.auth)
+  console.log("🚀 ~ file: Header.tsx:29 ~ user:", user)
+const navigate = useNavigate()
   useEffect(() => {
     const handleScroll = () => {
       const scrollTop = window.scrollY;
@@ -35,7 +38,7 @@ const Header: FC = () => {
   }, []);
 
   const getCategories = async () => {
-    let data = await api({ method: "get", url: `${apiPath?.categories?.all}?page=1&pageSize=100` })
+    let data = await apiAction({ method: "get", url: `${apiPath?.categories?.all}?page=1&pageSize=100` })
     setCategories(data?.data)
   }
 
@@ -140,16 +143,57 @@ const Header: FC = () => {
               </div>
             </div>
             <div className="flex items-center justify-end">
-              <div className="flex flex-nowrap flex-col items-start">
-                <div className="mb-[5px] justify-center flex flex-row w-full  items-stretch flex-wrap">
-                  <div className="w-[33.33%] py-0 px-5 flex-col flex text-center items-center cursor-pointer">
-                    <FontAwesomeIcon icon={faUser} size="xl" />
+            <div className="mx-3 relative">
+            <div className="t-0 absolute left-5 bottom-[10px]">
+                  <p className="flex h-2 w-2 items-center justify-center rounded-full bg-[#211c50] p-2 text-[10px] text-white">3</p>
+           </div>
+            <svg xmlns="http://www.w3.org/2000/svg" height="19" width="19" viewBox="0 0 512 512"><path d="M225.8 468.2l-2.5-2.3L48.1 303.2C17.4 274.7 0 234.7 0 192.8v-3.3c0-70.4 50-130.8 119.2-144C158.6 37.9 198.9 47 231 69.6c9 6.4 17.4 13.8 25 22.3c4.2-4.8 8.7-9.2 13.5-13.3c3.7-3.2 7.5-6.2 11.5-9c0 0 0 0 0 0C313.1 47 353.4 37.9 392.8 45.4C462 58.6 512 119.1 512 189.5v3.3c0 41.9-17.4 81.9-48.1 110.4L288.7 465.9l-2.5 2.3c-8.2 7.6-19 11.9-30.2 11.9s-22-4.2-30.2-11.9zM239.1 145c-.4-.3-.7-.7-1-1.1l-17.8-20c0 0-.1-.1-.1-.1c0 0 0 0 0 0c-23.1-25.9-58-37.7-92-31.2C81.6 101.5 48 142.1 48 189.5v3.3c0 28.5 11.9 55.8 32.8 75.2L256 430.7 431.2 268c20.9-19.4 32.8-46.7 32.8-75.2v-3.3c0-47.3-33.6-88-80.1-96.9c-34-6.5-69 5.4-92 31.2c0 0 0 0-.1 .1s0 0-.1 .1l-17.8 20c-.3 .4-.7 .7-1 1.1c-4.5 4.5-10.6 7-16.9 7s-12.4-2.5-16.9-7z"/></svg>
+            </div>
+            <div className="mx-3 relative">
+            <FontAwesomeIcon icon={faCartShopping} size="lg" />
+            </div>
+              <div className="flex flex-nowrap flex-col  relative" onClick={() => user?.id ? setMenu(!menu) : navigate("/login")}>
+          <div className=" justify-center flex flex-row w-full  items-stretch flex-wrap">
+                  <div className="w-[23.33%] py-0 pl-3 flex-col flex text-center items-center cursor-pointer">
+                    <FontAwesomeIcon icon={faUser} size="lg" />
                   </div>
-                  <div className="w-[33.33%] py-0 px-5 flex-col flex text-center items-center">
-                    <Link to={""}>cfddscz</Link>
+                  <div className="w-[73.33%] py-0 px-3 flex-col flex text-center items-center">
+                    <Link to={""}>{user?.id ? `${user?.firstname} ${user?.lastname}` : "Login"}</Link>
                   </div>
-                  <div className="w-[33.33%] py-0 px-5 flex-col flex text-center items-center"></div>
+                  <div className=" py-0 px-5 flex-col flex text-center items-center"></div>
                 </div>
+                {menu && <div 
+            x-show={menu} 
+            x-transition:enter="transition ease-out duration-200"
+            x-transition:enter-start="opacity-0 scale-90"
+            x-transition:enter-end="opacity-100 scale-100"
+            x-transition:leave="transition ease-in duration-200"
+            x-transition:leave-start="opacity-100 scale-100"
+            x-transition:leave-end="opacity-0 scale-90"
+            className="absolute left-[50%] top-[70%] z-full mt-3 z-[999] w-screen max-w-[10rem] -translate-x-1/2 transform px-2 sm:px-0">
+
+            <div className="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
+            <div className="relative grid gap-6 bg-white px-5 py-4 sm:gap-8 sm:py-4" onClick={()=>{
+              dispatch(handleLogout())
+              setMenu(false)
+              // navigate("/")
+            }}>
+                <a href="#" className="-m-3 flex items-start rounded-lg p-3 hover:bg-gray-50">
+                <svg className="h-5 w-5 flex-shrink-0 text-template-secondary" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 1C2.44771 1 2 1.44772 2 2V13C2 13.5523 2.44772 14 3 14H10.5C10.7761 14 11 13.7761 11 13.5C11 13.2239 10.7761 13 10.5 13H3V2L10.5 2C10.7761 2 11 1.77614 11 1.5C11 1.22386 10.7761 1 10.5 1H3ZM12.6036 4.89645C12.4083 4.70118 12.0917 4.70118 11.8964 4.89645C11.7012 5.09171 11.7012 5.40829 11.8964 5.60355L13.2929 7H6.5C6.22386 7 6 7.22386 6 7.5C6 7.77614 6.22386 8 6.5 8H13.2929L11.8964 9.39645C11.7012 9.59171 11.7012 9.90829 11.8964 10.1036C12.0917 10.2988 12.4083 10.2988 12.6036 10.1036L14.8536 7.85355C15.0488 7.65829 15.0488 7.34171 14.8536 7.14645L12.6036 4.89645Z" fill="currentColor" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+                {/* <svg className="h-6 w-6 flex-shrink-0 text-template-secondary" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" >
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 21v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21m0 0h4.5V3.545M12.75 21h7.5V10.75M2.25 21h1.5m18 0h-18M2.25 9l4.5-1.636M18.75 3l-1.5.545m0 6.205l3 1m1.5.5l-1.5-.5M6.75 7.364V3h-3v18m3-13.636l10.5-3.819" />
+                </svg> */}
+                
+                <div className="ml-4">
+                    <p className="text-sm font-medium text-gray-900">Logout</p>
+                </div>
+                </a>
+
+               
+            </div>
+            
+            </div>
+        </div>}
               </div>
             </div>
           </div>

@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import MultiRangeSlider, { ChangeResult } from "multi-range-slider-react";
 import { Button } from '../ui/button';
-import api from '@/services/api';
 import { diamondProperty } from '@/lib/interfaces/category';
 import { apiPath } from '@/lib/api-path';
+import useApi from '@/hooks/useApi';
 
 const Sidebar = ({ setFilter, filter }: any) => {
   const [colors, setColors] = useState([]);
   const [cuts, setCuts] = useState([]);
   const [clarities, setClarities] = useState([]);
+  const { apiAction } = useApi()
   useEffect(() => {
     getColors()
     getCuts()
@@ -16,15 +17,15 @@ const Sidebar = ({ setFilter, filter }: any) => {
   }, [])
 
   const getColors = async () => {
-    const data = await api({ method: "get", url: `${apiPath?.color?.all}` })
+    const data = await apiAction({ method: "get", url: `${apiPath?.color?.all}` })
     setColors(data?.data?.Colordata)
   }
   const getCuts = async () => {
-    const data = await api({ method: "get", url: `${apiPath?.cuts?.all}` })
+    const data = await apiAction({ method: "get", url: `${apiPath?.cuts?.all}` })
     setCuts(data?.data?.Cutdata)
   }
   const getClarity = async () => {
-    const data = await api({ method: "get", url: `${apiPath?.clarity?.all}` })
+    const data = await apiAction({ method: "get", url: `${apiPath?.clarity?.all}` })
     setClarities(data?.data?.Claritydata)
   }
 

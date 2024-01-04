@@ -34,3 +34,21 @@ export interface subCategory {
     createdAt: string;
     updatedAt: string;
   }
+
+  export interface productType {
+    id:string;
+    price: string;
+    title:string;
+    createdAt: string;
+    updatedAt: string;
+    productimage?: string[]
+  }
+
+
+  export interface shapeType{
+    id:string;
+    name:string;
+    description: string;
+    image: string;
+    updatedAt: string;
+  }

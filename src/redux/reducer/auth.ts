@@ -15,12 +15,16 @@ const authSlice = createSlice({
       state.token = action.payload?.accessToken
       state.user = action.payload?.qurey
     },
+    handleLogout: (state) => {
+      state.token = ""
+      state.user = {}
+    }
 },
     extraReducers: (builder) => {
       
     }
   });
   // eslint-disable-next-line no-empty-pattern
-  export const {handleLogin } = authSlice.actions;
+  export const {handleLogin,handleLogout } = authSlice.actions;
   
   export default authSlice.reducer;

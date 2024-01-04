@@ -1,0 +1,22 @@
+import { showToast } from '@/lib/utils'
+import React from 'react'
+import { useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+
+const useCheckPermission = () => {
+    const navigate = useNavigate()
+    const { token, user } = useSelector((state: { auth: any }) => state?.auth)
+    console.log("🚀 ~ file: useCheckPermission.tsx:9 ~ useCheckPermission ~ token:", token)
+    const checkPermission = (msg:string,path:boolean) => {
+        if (user?.id) return { token, user }
+        else {
+            showToast(msg)
+            path && navigate('/login')}
+            return
+        
+    }
+
+    return { checkPermission,token,user }
+}
+
+export default useCheckPermission
