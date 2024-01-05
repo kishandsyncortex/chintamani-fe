@@ -18,13 +18,10 @@ const Diamonds = () => {
   const [limit] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const [filter, setFilter] = useState<any>({});
-  console.log("🚀 ~ file: Diamonds.tsx:35 ~ Diamonds ~ filter:", filter)
   const [products, setProducts] = useState([]);
   const { category: { category } } = useSelector((state: any) => state)
   const dispatch = useDispatch()
   const { token, user } = useCheckPermission()
-  console.log("🚀 ~ file: Diamonds.tsx:26 ~ Diamonds ~ token:", token)
-  console.log("🚀 ~ file: Diamonds.tsx:26 ~ Diamonds ~ user:", user)
   const { apiAction } = useApi()
 
   useEffect(() => {

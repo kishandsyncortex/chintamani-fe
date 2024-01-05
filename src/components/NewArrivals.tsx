@@ -19,7 +19,6 @@ useEffect(() => {
 const getLatestProduct =async () => {
   const data = await apiAction({ method: "get", url: `${apiPath?.categories?.product}?sort=3` })
   setLatestProducts(data?.data?.product)
-  console.log("🚀 ~ file: NewArrivals.tsx:21 ~ getLatestProduct ~ data:", data)
 }
 
   return (

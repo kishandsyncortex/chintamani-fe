@@ -24,7 +24,6 @@ const ContactUs = () => {
   })
 
   const [error, setError] = useState<IError>({})
-  console.log("🚀 ~ file: ContactUs.tsx:26 ~ ContactUs ~ error:", error)
 
   const handleSubmit = async (e: any) => {
     e?.preventDefault()

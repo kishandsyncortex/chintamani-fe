@@ -70,7 +70,6 @@ const apiAction = ({
         }
     }).catch(err => {
         if(err?.response?.data?.message === "Invalid authorization token"){
-            console.log("🚀 ~ file: index.ts:68 ~ returninstance.request ~ err:", err)
             dispatch(handleLogout())
             return
         }

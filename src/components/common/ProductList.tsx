@@ -3,18 +3,19 @@ import RoundedDiamond from "../../../public/assests/Images/roundedDiamon.png";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import api from '@/services/api';
 import { apiPath } from '@/lib/api-path';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import useApi from '@/hooks/useApi';
 import { productType } from '@/lib/interfaces/category';
 import { showToast } from '@/lib/utils';
+import { addCartProduct, addWishLishProduct } from '@/redux/reducer/cart';
 
 const ProductList = ({ products = [], fetchProducts }: any) => {
     const { user, token } = useSelector((state: { auth: any; }) => state.auth)
     const [wishlist, setWishlist] = useState<string[]>([])
     const [cartProducts, setCartProducts] = useState<string[]>([])
-    console.log("🚀 ~ file: ProductList.tsx:13 ~ ProductList ~ wishlist:", wishlist)
     const { apiAction } = useApi()
+    const dispatch =useDispatch()
 
     useEffect(() => {
         if (user?.id){
@@ -26,14 +27,12 @@ const ProductList = ({ products = [], fetchProducts }: any) => {
 
     const fetchCartData = async () => {
         const data = await apiAction({ method: "get", url: `${apiPath?.user?.allCart}/${user?.id}`, headers: { "Authorization": `Bearer ${token}` } })
-        console.log("🚀 ~ file: Diamonds.tsx:60 ~ fetchCartData ~ data:", data?.data?.cart_products_id, data?.data?.cart_products_id?.map((id: string) => id))
         if (data)
             setCartProducts(data?.data?.products_id?.map((product: productType) => product?.id))
     }
 
     const fetchWishlistData = async () => {
         const data = await apiAction({ method: "get", url: `${apiPath?.user?.allWishlist}/${user?.id}`, headers: { "Authorization": `Bearer ${token}` } })
-        console.log("🚀 ~ file: Diamonds.tsx:60 ~ fetchWishlistData ~ data:", data?.data?.whishlist_products_id, data?.data?.whishlist_products_id?.map((id: string) => id))
         if (data)
             setWishlist(data?.data?.whishlist_products_id?.map((product: productType) => product?.id))
 
@@ -41,8 +40,8 @@ const ProductList = ({ products = [], fetchProducts }: any) => {
 
     const addToWishList = async (id: string) => {
         const data = await apiAction({ method: "post", url: `${apiPath?.product?.addWishlist}`, data: { userid: user?.id, productid: id }, headers: { "Authorization": `Bearer ${token}` } })
-        console.log("🚀 ~ file: ProductList.tsx:44 ~ addToWishList ~ !data?.data?.error:", !data?.data?.error)
         if (!data?.data?.error){
+            dispatch(addWishLishProduct(data?.data))
             showToast("Added to your wishlist")
             setWishlist([...wishlist, id])
 
@@ -52,6 +51,7 @@ const ProductList = ({ products = [], fetchProducts }: any) => {
     const removeFromWishList = async (id: string) => {
         const data = await apiAction({ method: "post", url: `${apiPath?.product?.removeWishlist}`, data: { userid: user?.id, productid: id }, headers: { "Authorization": `Bearer ${token}` } })
         if (!data?.data?.error){
+            dispatch(addWishLishProduct(data?.data))
             showToast("Removed to your wishlist")
             setWishlist(wishlist?.filter((item: string) => item !== id))
 
@@ -61,14 +61,15 @@ const ProductList = ({ products = [], fetchProducts }: any) => {
 
     const addToCart = async (id: string) => {
         const data = await apiAction({ method: "post", url: `${apiPath?.product?.addToCart}`, data: { userid: user?.id, productid: id }, headers: { "Authorization": `Bearer ${token}` } })
-        console.log("🚀 ~ file: ProductList.tsx:18 ~ addToCart ~ data:", data)
-        if (!data?.data?.error)
+        if (!data?.data?.error){
+            dispatch(addCartProduct(data?.data))
             setCartProducts([...cartProducts, id])
+
+        }
     }
 
     const removeFromCart = async (id: string) => {
         const data = await apiAction({ method: "post", url: `${apiPath?.product?.removeFromCart}`, data: { userid: user?.id, productid: id }, headers: { "Authorization": `Bearer ${token}` } })
-        console.log("🚀 ~ file: ProductList.tsx:18 ~ addToCart ~ data:", data)
         if (!data?.data?.error)
             setCartProducts(cartProducts?.filter((item: string) => item !== id))
     }

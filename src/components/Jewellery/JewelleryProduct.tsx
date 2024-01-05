@@ -32,7 +32,6 @@ const JewelleryProduct: FC = () => {
 
   const { category } = useSelector((state: any) => state?.category)
   const dispatch = useDispatch()
-  console.log("🚀 ~ file: ShopItem.tsx:20 ~ category:", category)
 
   const fetchProducts = async (id: string, name: string) => {
     const data = await api({ method: "get", url: `${apiPath?.categories?.product}?${name?.toLowerCase()}=${id}` })

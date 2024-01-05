@@ -48,7 +48,6 @@ const Sidebar = ({ setFilter, filter }: any) => {
               // props.setMinValue(e.minValue);
               // props.setMaxValue(e.maxValue);
             }} onChange={(e: ChangeResult) => {
-              console.log("🚀 ~ file: Sidebar.tsx:51 ~ Sidebar ~ e:", e)
               setFilter({ ...filter, minPrice: e.minValue, maxPrice: e.maxValue })
               // props.setMinValue2(e.minValue);
               // props.setMaxValue2(e.maxValue);

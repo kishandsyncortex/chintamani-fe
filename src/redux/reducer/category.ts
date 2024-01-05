@@ -10,7 +10,6 @@ const categorySlice = createSlice({
     initialState,
     reducers: {
   setCategory: (state, action) => {
-      console.log("🚀 ~ file: category.ts:16 ~ action:", action)
       state.category = action.payload
     },
 },

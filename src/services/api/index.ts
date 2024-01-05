@@ -4,7 +4,6 @@ import axios, { AxiosError } from "axios";
 import { useDispatch } from "react-redux";
 
 export const BASE_URL = import.meta.env.VITE_API_BASE_URL
-console.log("🚀 ~ file: index.ts:4 ~ BASE_URL:", BASE_URL)
 
 interface AxiosParams {
     baseURL?: string;

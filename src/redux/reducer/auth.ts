@@ -11,7 +11,6 @@ const authSlice = createSlice({
     initialState,
     reducers: {
   handleLogin: (state, action) => {
-      console.log("🚀 ~ file: category.ts:16 ~ action:", action)
       state.token = action.payload?.accessToken
       state.user = action.payload?.qurey
     },

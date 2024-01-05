@@ -43,7 +43,6 @@ const Login = () => {
             navigate("/")
 
         }
-        console.log("🚀 ~ file: login.tsx:29 ~ handleSubmit ~ data:", data)
     }
 
     return (

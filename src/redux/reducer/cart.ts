@@ -3,7 +3,9 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
     cartProduct: [],
-    count: 0
+    cartCount: 0,
+    wishListProduct: [],
+    wishListCount: 0
 }
 
 const cartSlice = createSlice({
@@ -11,14 +13,17 @@ const cartSlice = createSlice({
     initialState,
     reducers: {
         addCartProduct: (state, action) => {
-            console.log("🚀 ~ file: category.ts:16 ~ action:", action)
-            state.cartProduct = action?.payload
-            state.count = action?.payload?.count
+            state.cartProduct = action?.payload?.products_id
+            state.cartCount = action?.payload?.products_id?.length
+        },
+        addWishLishProduct: (state, action) => {
+            state.wishListProduct = action?.payload?.whishlist_products_id
+            state.wishListCount = action?.payload?.whishlist_products_id?.length
         },
     },
 
 });
 // eslint-disable-next-line no-empty-pattern
-export const { addCartProduct } = cartSlice.actions;
+export const { addCartProduct,addWishLishProduct } = cartSlice.actions;
 
 export default cartSlice.reducer;

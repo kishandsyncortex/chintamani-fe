@@ -6,7 +6,6 @@ import { useNavigate } from 'react-router-dom'
 const useCheckPermission = () => {
     const navigate = useNavigate()
     const { token, user } = useSelector((state: { auth: any }) => state?.auth)
-    console.log("🚀 ~ file: useCheckPermission.tsx:9 ~ useCheckPermission ~ token:", token)
     const checkPermission = (msg:string,path:boolean) => {
         if (user?.id) return { token, user }
         else {
