@@ -63,7 +63,7 @@ const ProductList = ({ products = [], fetchProducts }: any) => {
         const data = await apiAction({ method: "post", url: `${apiPath?.product?.addToCart}`, data: { userid: user?.id, productid: id }, headers: { "Authorization": `Bearer ${token}` } })
         if (!data?.data?.error){
             dispatch(addCartProduct(data?.data))
-            setCartProducts([...cartProducts, id])
+            setCartProducts([...cartProducts||[], id])
 
         }
     }
@@ -100,7 +100,7 @@ const ProductList = ({ products = [], fetchProducts }: any) => {
                     {/* <FontAwesomeIcon icon={faHeart} onClick={() => addToWishList(product?.id)} />
                     <FontAwesomeIcon icon={regular("heart")} /> */}
 
-                    <button onClick={() => addToCart(product?.id)}>add to cart</button>
+                  {cartProducts?.includes(product?.id) ? <button>Go to Cart</button>:  <button onClick={() => addToCart(product?.id)}>add to cart</button>}
                 </div>
             </li>
         }) : <div className="flex justify-center w-full mt-14">No Products Found</div>}

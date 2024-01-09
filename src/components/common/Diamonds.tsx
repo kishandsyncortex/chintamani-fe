@@ -21,7 +21,7 @@ const Diamonds = () => {
   const [products, setProducts] = useState([]);
   const { category: { category } } = useSelector((state: any) => state)
   const dispatch = useDispatch()
-  const { token, user } = useCheckPermission()
+  // const { token, user } = useCheckPermission()
   const { apiAction } = useApi()
 
   useEffect(() => {
