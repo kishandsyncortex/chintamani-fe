@@ -3,14 +3,16 @@ import Footer from "../Footer";
 import Header from "../Header";
 import Cart from "../cart/Cart";
 import { useState } from "react";
+import { useSelector } from "react-redux";
 const RootLayout = () => {
-  const [openCart, setOpenCart] = useState(false)
+  // const [openCart, setOpenCart] = useState(false)
+  const {openCart} =  useSelector((state: {cart:any}) => state?.cart)
   return (
     <>
-      <Header setOpenCart={()=>setOpenCart(!openCart)}/>
-      <Cart setOpenCart={setOpenCart} openCart={openCart}/>
+      <Header  />
+      <Cart  />
       <main>
-        <Outlet />
+        <Outlet   />
       </main>
       <Footer />
     </>

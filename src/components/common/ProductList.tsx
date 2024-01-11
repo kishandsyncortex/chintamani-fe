@@ -8,7 +8,7 @@ import { useEffect, useState } from 'react';
 import useApi from '@/hooks/useApi';
 import { productType } from '@/lib/interfaces/category';
 import { showToast } from '@/lib/utils';
-import { addCartProduct, addWishLishProduct } from '@/redux/reducer/cart';
+import { addCartProduct, addWishLishProduct, setOpenCart } from '@/redux/reducer/cart';
 
 const ProductList = ({ products = [], fetchProducts }: any) => {
     const { user, token } = useSelector((state: { auth: any; }) => state.auth)
@@ -60,7 +60,7 @@ const ProductList = ({ products = [], fetchProducts }: any) => {
     }
 
     const addToCart = async (id: string) => {
-        const data = await apiAction({ method: "post", url: `${apiPath?.product?.addToCart}`, data: { userid: user?.id, productid: id }, headers: { "Authorization": `Bearer ${token}` } })
+        const data = await apiAction({ method: "post", url: `${apiPath?.product?.addToCart}`, data: { userid: user?.id, productid: id ,quantity:1}, headers: { "Authorization": `Bearer ${token}` } })
         if (!data?.data?.error){
             dispatch(addCartProduct(data?.data))
             setCartProducts([...cartProducts||[], id])
@@ -100,7 +100,7 @@ const ProductList = ({ products = [], fetchProducts }: any) => {
                     {/* <FontAwesomeIcon icon={faHeart} onClick={() => addToWishList(product?.id)} />
                     <FontAwesomeIcon icon={regular("heart")} /> */}
 
-                  {cartProducts?.includes(product?.id) ? <button>Go to Cart</button>:  <button onClick={() => addToCart(product?.id)}>add to cart</button>}
+                  {cartProducts?.includes(product?.id) ? <button onClick={() => dispatch(setOpenCart())}>Go to Cart</button>:  <button onClick={() => addToCart(product?.id)}>add to cart</button>}
                 </div>
             </li>
         }) : <div className="flex justify-center w-full mt-14">No Products Found</div>}

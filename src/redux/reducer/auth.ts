@@ -1,5 +1,5 @@
 /* eslint-disable no-undef */
-import {  createSlice } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   token: "",
@@ -7,23 +7,23 @@ const initialState = {
 }
 
 const authSlice = createSlice({
-    name: 'category',
-    initialState,
-    reducers: {
-  handleLogin: (state, action) => {
+  name: 'category',
+  initialState,
+  reducers: {
+    handleLogin: (state, action) => {
       state.token = action.payload?.accessToken
-      state.user = action.payload?.qurey
+      state.user = action.payload?.qurey||action.payload?.data
     },
     handleLogout: (state) => {
       state.token = ""
       state.user = {}
     }
-},
-    extraReducers: (builder) => {
-      
-    }
-  });
-  // eslint-disable-next-line no-empty-pattern
-  export const {handleLogin,handleLogout } = authSlice.actions;
-  
-  export default authSlice.reducer;
+  },
+  extraReducers: (builder) => {
+
+  }
+});
+// eslint-disable-next-line no-empty-pattern
+export const { handleLogin, handleLogout } = authSlice.actions;
+
+export default authSlice.reducer;

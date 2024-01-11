@@ -2,7 +2,6 @@ import AuthWrapper from '@/components/auth/AuthWrapper'
 import useApi from '@/hooks/useApi'
 import { apiPath } from '@/lib/api-path'
 import { EMAIL_REGEX } from '@/lib/constant'
-import { showToast } from '@/lib/utils'
 import { handleLogin } from '@/redux/reducer/auth'
 import api from '@/services/api'
 import React, { ChangeEvent, useState } from 'react'
@@ -14,15 +13,13 @@ interface IError {
     password?: string
 
 }
-
-const Login = () => {
+const UserVerification = () => {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [error, setError] = useState<IError>({})
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const { apiAction } = useApi()
-
     const handleSubmit = async () => {
         let err: IError = {}
         if (!email) {
@@ -41,14 +38,11 @@ const Login = () => {
         }
         const data = await apiAction({ method: "post", url: `${apiPath?.auth?.login}`, data: { email, password } })
         if (data) {
-            showToast("Login  successfully!")
-
             dispatch(handleLogin(data?.data))
             navigate("/")
 
         }
     }
-
     return (
         <AuthWrapper>
             <div className="row-span-4 row-start-2 text-4xl">
@@ -67,7 +61,7 @@ const Login = () => {
                         className="w-full bg-[#211c50] py-3 px-6 border hover: border-gray-500 rounded shadow text-base font-sans" />
                     {error?.email && <p className="text-red-500 text-xs mt-2">{error?.email}</p>}
                 </div>
-                <div className="pt-2 pr-20">
+                {/* <div className="pt-2 pr-20">
                     <label className="text-sm font-sans font-medium">
                         Password
                     </label>
@@ -84,7 +78,7 @@ const Login = () => {
                     <a href="" className="text-sm font-sans font-medium text-gray-600 underline">
                         Forgot password?
                     </a>
-                </div>
+                </div> */}
                 <div className="text-sm font-sans font-medium w-full pr-20 pt-10">
                     <button
                         onClick={handleSubmit}
@@ -94,15 +88,8 @@ const Login = () => {
                     </button>
                 </div>
             </div>
-            <div className='flex text-sm font-sans font-medium text-gray-400 mt-2 gap-1'>
-            Don´t have an account?
-            <a href="/sign-up" className=" underline">
-                 Sign up
-            </a>
-            </div>
         </AuthWrapper>
-
     )
 }
 
-export default Login
+export default UserVerification

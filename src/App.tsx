@@ -29,6 +29,9 @@ import Diamonds from "./components/common/Diamonds";
 import { showErrorToast, showToast } from "./lib/utils";
 import { FC, ReactNode, useEffect } from "react";
 import Login from "./pages/auth/login";
+import WishList from "./pages/wishlist";
+import SignUp from "./pages/auth/sign-up";
+import UserVerification from "./pages/auth/UserVerification";
 
 
 
@@ -68,12 +71,24 @@ const router = createBrowserRouter([
     element: <Login />,
   },
   {
+    path: "/sign-up",
+    element: <SignUp />,
+  },
+  {
+    path: "/verify",
+    element: <UserVerification />,
+  },
+  {
     path: "/",
     element: <RootLayout />,
     children: [
       {
         path: "shop",
         element: <ShopItem />,
+      },
+      {
+        path: "wishlist",
+        element: <WishList />,
       },
 
       {

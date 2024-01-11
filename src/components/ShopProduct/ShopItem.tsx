@@ -15,7 +15,8 @@ import { apiPath } from "@/lib/api-path";
 import { breadCrumbType, diamondProperty } from "@/lib/interfaces/category";
 import { setCategory } from "@/redux/reducer/category";
 
-const ShopItem: FC = () => {
+const ShopItem: FC = (props) => {
+  console.log("🚀 ~ props:", props)
   const [minValue, setMinValue] = useState(0);
   const [maxValue, setMaxValue] = useState(0);
   const [minValue2, setMinValue2] = useState(0);

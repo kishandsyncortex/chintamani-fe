@@ -1,4 +1,4 @@
-import { combineReducers, configureStore } from '@reduxjs/toolkit'
+import { AnyAction, combineReducers, configureStore } from '@reduxjs/toolkit'
 import category from './reducer/category'
 import { persistStore, persistReducer } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
@@ -15,8 +15,16 @@ const persistConfig = {
   key: 'root',
   storage,
 }
+const reducerProxy = (state: any, action: AnyAction) => {
+  console.log("🚀 ~ reducerProxy ~ action:", action)
+  if(action.type === 'category/handleLogout') {
+    state={}
+    return rootReducer(state, action);
+  }
+  return rootReducer(state, action);
+}
  
-const persistedReducer = persistReducer(persistConfig, rootReducer)
+const persistedReducer = persistReducer(persistConfig, reducerProxy)
 
 export const store = configureStore({
   reducer: persistedReducer,
