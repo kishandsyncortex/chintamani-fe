@@ -7,6 +7,7 @@ import { handleLogin } from '@/redux/reducer/auth'
 import api from '@/services/api'
 import React, { ChangeEvent, useState } from 'react'
 import { useDispatch } from 'react-redux'
+import { Link } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
 
 interface IError {
@@ -156,7 +157,7 @@ const SignUp = () => {
                     </div>
                     {error?.email && <p className="text-red-500 text-xs mt-2">{error?.email}</p>}
                 </div>
-                {showOTPField ? <div className=" pr-20">
+               <div className=" pr-20">
                     <label className="text-sm font-sans font-medium">
                         OTP
                     </label>
@@ -167,7 +168,7 @@ const SignUp = () => {
                         placeholder="Enter your otp"
                         className="w-full bg-[#211c50] py-3 px-6 border hover: border-gray-500 rounded shadow text-base font-sans" />
                     {error?.otp && <p className="text-red-500 text-xs mt-2">{error?.otp}</p>}
-                </div> : null}
+                </div> 
                 <div className="pt-2 pr-20">
                     <label className="text-sm font-sans font-medium">
                         Password
@@ -195,9 +196,9 @@ const SignUp = () => {
             </div>
             <div className='flex text-sm font-sans font-medium text-gray-400 mt-2 gap-1'>
                 Don´t have an account?
-                <a href="/login" className=" underline">
+                <Link to="/login" className='underline'>
                     Sign In
-                </a>
+                </Link>
             </div>
 
         </AuthWrapper>

@@ -32,6 +32,9 @@ import Login from "./pages/auth/login";
 import WishList from "./pages/wishlist";
 import SignUp from "./pages/auth/sign-up";
 import UserVerification from "./pages/auth/UserVerification";
+import Forgotpassword from "./pages/auth/forgot-password";
+import ProductDetails from "./pages/Product/ProductDetails";
+import Checkout from "./pages/checkout";
 
 
 
@@ -75,8 +78,8 @@ const router = createBrowserRouter([
     element: <SignUp />,
   },
   {
-    path: "/verify",
-    element: <UserVerification />,
+    path: "/forgot-password",
+    element: <Forgotpassword />,
   },
   {
     path: "/",
@@ -85,6 +88,14 @@ const router = createBrowserRouter([
       {
         path: "shop",
         element: <ShopItem />,
+      },
+      {
+        path: "checkout",
+        element: <Checkout/>,
+      },
+      {
+        path: "product/:id",
+        element: <ProductDetails />,
       },
       {
         path: "wishlist",

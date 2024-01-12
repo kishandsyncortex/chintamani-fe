@@ -48,7 +48,7 @@ const apiAction = ({
     const config = {
         url,
         method,
-        data,
+       data,
         params,
         headers: {
             "Content-Type": "application/json",

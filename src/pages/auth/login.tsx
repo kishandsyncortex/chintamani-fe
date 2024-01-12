@@ -7,6 +7,7 @@ import { handleLogin } from '@/redux/reducer/auth'
 import api from '@/services/api'
 import React, { ChangeEvent, useState } from 'react'
 import { useDispatch } from 'react-redux'
+import { Link } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
 
 interface IError {
@@ -17,8 +18,8 @@ interface IError {
 
 const Login = () => {
     const [email, setEmail] = useState("")
-    const [password, setPassword] = useState("")
     const [error, setError] = useState<IError>({})
+    const [password, setPassword] = useState("")
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const { apiAction } = useApi()
@@ -80,10 +81,10 @@ const Login = () => {
                         placeholder="Enter your password"
                         className=" w-full bg-[#211c50] py-3 px-6 border hover: border-gray-500 rounded shadow text-base font-sans" />
                     {error?.password && <p className="text-red-500 text-xs mt-2">{error?.password}</p>}
-
-                    <a href="" className="text-sm font-sans font-medium text-gray-600 underline">
+                    <Link to={"/forgot-password"} className="text-sm font-sans font-medium text-gray-600 underline">
                         Forgot password?
-                    </a>
+                    </Link>
+
                 </div>
                 <div className="text-sm font-sans font-medium w-full pr-20 pt-10">
                     <button
@@ -95,10 +96,12 @@ const Login = () => {
                 </div>
             </div>
             <div className='flex text-sm font-sans font-medium text-gray-400 mt-2 gap-1'>
-            Don´t have an account?
-            <a href="/sign-up" className=" underline">
-                 Sign up
-            </a>
+                Don´t have an account?
+                <Link to={"/sign-up"} className='underline'>
+                    Sign up
+                </Link>
+                {/* <a href="/sign-up" className=" underline">
+            </a> */}
             </div>
         </AuthWrapper>
 

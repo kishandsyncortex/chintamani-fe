@@ -9,21 +9,35 @@ import useApi from '@/hooks/useApi';
 import { productType } from '@/lib/interfaces/category';
 import { showToast } from '@/lib/utils';
 import { addCartProduct, addWishLishProduct, setOpenCart } from '@/redux/reducer/cart';
+import { useNavigate } from 'react-router-dom';
+import { setCategory } from '@/redux/reducer/category';
+import { toast } from 'react-toastify';
 
 const ProductList = ({ products = [], fetchProducts }: any) => {
     const { user, token } = useSelector((state: { auth: any; }) => state.auth)
+    const { category } = useSelector((state: any) => state?.category)
+
     const [wishlist, setWishlist] = useState<string[]>([])
     const [cartProducts, setCartProducts] = useState<string[]>([])
     const { apiAction } = useApi()
-    const dispatch =useDispatch()
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
 
     useEffect(() => {
-        if (user?.id){
+        if (user?.id) {
 
             fetchCartData()
             fetchWishlistData()
         }
     }, [])
+
+    const checkUser =  () => {
+        if (user?.id)
+            return true
+      
+        toast("Please login to enhance experience")
+        navigate("/login")
+    }
 
     const fetchCartData = async () => {
         const data = await apiAction({ method: "get", url: `${apiPath?.user?.allCart}/${user?.id}`, headers: { "Authorization": `Bearer ${token}` } })
@@ -39,33 +53,44 @@ const ProductList = ({ products = [], fetchProducts }: any) => {
     }
 
     const addToWishList = async (id: string) => {
-        const data = await apiAction({ method: "post", url: `${apiPath?.product?.addWishlist}`, data: { userid: user?.id, productid: id }, headers: { "Authorization": `Bearer ${token}` } })
-        if (!data?.data?.error){
-            dispatch(addWishLishProduct(data?.data))
-            showToast("Added to your wishlist")
-            setWishlist([...wishlist, id])
+       if( checkUser()){
+           const data = await apiAction({ method: "post", url: `${apiPath?.product?.addWishlist}`, data: { userid: user?.id, productid: id }, headers: { "Authorization": `Bearer ${token}` } })
+           if (!data?.data?.error && data) {
+               dispatch(addWishLishProduct(data?.data))
+               showToast("Added to your wishlist")
+               setWishlist([...wishlist, id])
+   
+           }
 
-        }
+       }
     }
 
     const removeFromWishList = async (id: string) => {
-        const data = await apiAction({ method: "post", url: `${apiPath?.product?.removeWishlist}`, data: { userid: user?.id, productid: id }, headers: { "Authorization": `Bearer ${token}` } })
-        if (!data?.data?.error){
-            dispatch(addWishLishProduct(data?.data))
-            showToast("Removed to your wishlist")
-            setWishlist(wishlist?.filter((item: string) => item !== id))
+       if( checkUser()){
 
-        }
+           const data = await apiAction({ method: "post", url: `${apiPath?.product?.removeWishlist}`, data: { userid: user?.id, productid: id }, headers: { "Authorization": `Bearer ${token}` } })
+           if (!data?.data?.error && data) {
+               dispatch(addWishLishProduct(data?.data))
+               showToast("Removed to your wishlist")
+               setWishlist(wishlist?.filter((item: string) => item !== id))
+    
+           }
+       }
+
 
     }
 
     const addToCart = async (id: string) => {
-        const data = await apiAction({ method: "post", url: `${apiPath?.product?.addToCart}`, data: { userid: user?.id, productid: id ,quantity:1}, headers: { "Authorization": `Bearer ${token}` } })
-        if (!data?.data?.error){
-            dispatch(addCartProduct(data?.data))
-            setCartProducts([...cartProducts||[], id])
+       if( checkUser()){
+           const data = await apiAction({ method: "post", url: `${apiPath?.product?.addToCart}`, data: { userid: user?.id, productid: id, quantity: 1 }, headers: { "Authorization": `Bearer ${token}` } })
+           if (!data?.data?.error) {
+               dispatch(addCartProduct(data?.data))
+               setCartProducts([...cartProducts || [], id])
+    
+           }
 
-        }
+       }
+
     }
 
     const removeFromCart = async (id: string) => {
@@ -74,19 +99,26 @@ const ProductList = ({ products = [], fetchProducts }: any) => {
             setCartProducts(cartProducts?.filter((item: string) => item !== id))
     }
 
+    const setMenu = async (productName: string, productid: string) => {
+        dispatch(setCategory([...category, { path: productName, name: productName }]))
+        navigate(`/product/${productid}`)
+    }
 
 
     return (<ul className="p-0 list-none clear-both after:table flex items-center flex-wrap gap-[3.5rem] cursor-pointer mb-[75px]">
         {products?.length ? products?.map((product: productType) => {
-            return <li className="max-w-full sm:max-w-[30%] float-left relative ml-0 bg-[#f1f1f1] rounded-[20px]">
-                <div className="flex text-center items-center flex-col relative rounded-t-lg overflow-hidden p-0 h-full decoration-none text-[#211c50] font-semibold">
-                    <img src={RoundedDiamond} alt="RoundedDiamond" className=" block shadow-none min-w-[250px]  h-[250px]" />
-                </div>
-                <div className="my-3 ml-3 border-b-[1px]">
-                    <div className="max-w-full overflow-hidden text-ellipsis whitespace-nowrap text-[16px] font-bold text-[#211c50]">
-                        {product?.title}
+            return <li className="max-w-full sm:max-w-[30%] float-left relative ml-0 bg-[#f1f1f1] rounded-[20px]" >
+                <div onClick={() => setMenu(product?.title, product?.id)}>
+                    <div className="flex text-center items-center flex-col relative rounded-t-lg overflow-hidden p-0 h-full decoration-none text-[#211c50] font-semibold">
+                        <img src={RoundedDiamond} alt="RoundedDiamond" className=" block shadow-none min-w-[250px]  h-[250px]" />
                     </div>
-                    <div className="text-yellow-800">${product?.price}</div>
+                    <div className="my-3 ml-3 border-b-[1px]">
+                        <div className="max-w-full overflow-hidden text-ellipsis whitespace-nowrap text-[16px] font-bold text-[#211c50]">
+                            {product?.title}
+                        </div>
+                        <div className="text-yellow-800">${product?.price}</div>
+                    </div>
+
                 </div>
                 <div className="mb-3 mx-3 flex items-center justify-between">
 
@@ -100,7 +132,7 @@ const ProductList = ({ products = [], fetchProducts }: any) => {
                     {/* <FontAwesomeIcon icon={faHeart} onClick={() => addToWishList(product?.id)} />
                     <FontAwesomeIcon icon={regular("heart")} /> */}
 
-                  {cartProducts?.includes(product?.id) ? <button onClick={() => dispatch(setOpenCart())}>Go to Cart</button>:  <button onClick={() => addToCart(product?.id)}>add to cart</button>}
+                    {cartProducts?.includes(product?.id) ? <button onClick={() => dispatch(setOpenCart())}>Go to Cart</button> : <button onClick={() => addToCart(product?.id)}>add to cart</button>}
                 </div>
             </li>
         }) : <div className="flex justify-center w-full mt-14">No Products Found</div>}

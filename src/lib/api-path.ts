@@ -21,7 +21,8 @@ export const apiPath = {
       removeWishlist:"whishlist/remove",
       addToCart:"cart/create",
       removeFromCart:"cart/remove",
-      updateCart:"/cart/update"
+      updateCart:"/cart/update",
+      product:"product/single/product"
     },
     user:{
         allWishlist:"whishlist/fetch",
@@ -34,7 +35,8 @@ export const apiPath = {
         resendOTP:"user/resendotp",
         register:"user/create",
         forgotPassword:"user/forgetpassword",
-        verifyOTP:"verification/forgetpassword"
+        verifyOTP:"user/verification/forgetpassword",
+        createPassword:"user/create_password"
     },
     contactUs:{
       create:"contact/create"

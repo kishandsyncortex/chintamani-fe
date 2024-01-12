@@ -198,3 +198,12 @@ input::-webkit-inner-spin-button {
 input[type=number] {
   -moz-appearance: textfield;
 }
+
+.circle{
+  height: 2.69231rem;
+    width: 2.69231rem;
+    background-color: #333;
+    border-radius: 50%;
+    text-align: center;
+    transition: transform 250ms ease;
+}
