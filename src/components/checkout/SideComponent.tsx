@@ -9,12 +9,12 @@ const renderCountView = (val: number) => {
     </div>
 }
 
-const SideComponent = () => {
+const SideComponent = ({address, setAddress, contact, setContact, setIsSave}) => {
     const [open, setOpen] = useState(1)
     const {auth:{user}} = useSelector((state: any) => state)
     console.log("🚀 ~ SideComponent ~ user:", user)
-    const [address, setAddress] = useState({})
-    const [contact, setContact] = useState()
+    
+    console.log("+++++", address, contact)
     const [error, setError] = useState({})
     const handleChange = (name: string, value: string) => {
         setAddress({ ...address, [name]: value })
@@ -41,6 +41,7 @@ const SideComponent = () => {
             setError(err)
             return
         }
+        setIsSave(true)
         setOpen(2)
     }
 
