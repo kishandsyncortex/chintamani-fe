@@ -35,6 +35,9 @@ import UserVerification from "./pages/auth/UserVerification";
 import Forgotpassword from "./pages/auth/forgot-password";
 import ProductDetails from "./pages/Product/ProductDetails";
 import Checkout from "./pages/checkout";
+import Blogs from "./pages/Blog";
+import Account from "./pages/account";
+import BlogDetails from "./pages/Blog/blogDetails";
 
 
 
@@ -88,6 +91,18 @@ const router = createBrowserRouter([
       {
         path: "shop",
         element: <ShopItem />,
+      },
+      {
+        path: "blog",
+        element: <Blogs />,
+      },
+      {
+        path: "account",
+        element: <Account />,
+      },
+      {
+        path: "blog-details/:id",
+        element: <BlogDetails />,
       },
       {
         path: "checkout",

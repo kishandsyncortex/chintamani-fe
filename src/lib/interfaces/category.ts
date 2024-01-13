@@ -95,3 +95,19 @@ export interface shapeType {
   image: string;
   updatedAt: string;
 }
+
+
+export interface blogType {
+  id?: string;
+  title?: string;
+  author?:{
+    firstname:string
+    lastname:string
+  };
+  heading?: string;
+  description?: string;
+  image?: string;
+  createdAt?: string;
+  updatedAt?: string;
+  
+}

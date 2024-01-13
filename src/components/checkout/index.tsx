@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import PaymentComponent from './PaymentComponent'
 import SideComponent from './SideComponent'
@@ -8,21 +8,47 @@ const CheckoutComponent = () => {
 
     const handleTotalAmount = () => {
         const totalAmount = cartProduct?.reduce((prev: number, products: any) => {
-          let product = products?.product || products
-          return prev + (product?.quantity || 1) * product?.price
+            let product = products?.product || products
+            return prev + (product?.quantity || 1) * product?.price
         }, 0)
         return totalAmount
-      }
+
+    }
+
+    useEffect(() => {
+        // updateProduct()
+    }, [])
+
+    const updateProduct = async () => {
+        var urlencoded = new URLSearchParams();
+        urlencoded.append("title", "1 1.07 Carat Radiant fef saf dsvd fdbfdb dsvfdsv");
+        urlencoded.append("productId", "7c2cdfe1-b2b2-4d21-a31a-60d5390f3afb");
+        var requestOptions :any= {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJlNjE5ZjlhOC00OWQ5LTQwYzItYTExMi1kYjczMTk2NzI2ZjIiLCJpYXQiOjE3MDUxMjI1MTQsImV4cCI6MTcwNTU1NDUxNH0.8vWEolFbvSMhLgQJN8NaPeUjJbuDx8uKpE2qltWzai8`
+            },
+            body: urlencoded,
+            redirect: 'follow'
+        };
+
+       await  fetch("http://192.168.0.171:8080/api/v1/product/update", requestOptions)
+            .then(response => response.text())
+            .then(result => console.log(result))
+            .catch(error => console.log('error', error));
+    }
+
     return (
         <div className='container mx-auto'>
 
             <div className="w-full bg-white border-t border-b border-gray-200 px-5 py-10 text-gray-800">
                 <div className="w-full">
                     <div className="-mx-3 md:flex items-start">
-                    <div className="px-3 md:w-5/12">
-                        <SideComponent/>
-                            
-                            <PaymentComponent/>
+                        <div className="px-3 md:w-5/12">
+                            <SideComponent />
+
+                            <PaymentComponent />
                             {/* <div className="w-full mx-auto rounded-lg bg-white border border-gray-200 text-gray-800 font-light mb-6">
                                 <div className="w-full p-3 border-b border-gray-200">
                                     <div className="mb-5">
@@ -111,7 +137,7 @@ const CheckoutComponent = () => {
                                                 </div>
                                                 <div className="flex-grow pl-3">
                                                     <h6 className="font-semibold uppercase text-gray-600">{product?.maintitle}</h6>
-                                                    <p className="text-gray-400">{product?.quantity||1}</p>
+                                                    <p className="text-gray-400">{product?.quantity || 1}</p>
                                                 </div>
                                                 <div>
                                                     <span className="font-semibold text-gray-600 text-xl">${product?.price}</span><span className="font-semibold text-gray-600 text-sm">.00</span>
@@ -135,7 +161,7 @@ const CheckoutComponent = () => {
                                     </div>
                                 </div>
                             </div> */}
-                                {/* <div className="w-full flex mb-3 items-center">
+                            {/* <div className="w-full flex mb-3 items-center">
                                     <div className="flex-grow">
                                         <span className="text-gray-600">Subtotal</span>
                                     </div>
@@ -143,7 +169,7 @@ const CheckoutComponent = () => {
                                         <span className="font-semibold">${handleTotalAmount()}</span>
                                     </div>
                                 </div> */}
-                                {/* <div className="w-full flex items-center">
+                            {/* <div className="w-full flex items-center">
                                     <div className="flex-grow">
                                         <span className="text-gray-600">Taxes (GST)</span>
                                     </div>
@@ -162,7 +188,7 @@ const CheckoutComponent = () => {
                                 </div>
                             </div>
                         </div>
-                      
+
                     </div>
                 </div>
             </div>

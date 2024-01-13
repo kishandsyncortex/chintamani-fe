@@ -13,6 +13,13 @@ export const apiPath = {
     cuts:{
       all:"cut/fetch"
     },
+    blogs:{
+      all:"blog/fetch/",
+      blog:"blog/fetch/"
+    },
+    banners:{
+      all:"banner/fetch"
+    },
     clarity:{
       all:"clarity/fetch"
     },

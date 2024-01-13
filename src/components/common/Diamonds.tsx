@@ -100,7 +100,7 @@ const Diamonds = () => {
                     nextLabel={">"}
                     breakLabel={"..."}
                     breakClassName={"break-me"}
-                    pageCount={Math.ceil(10 / limit)}
+                    pageCount={Math.ceil(totalRecords / limit)}
                     marginPagesDisplayed={2}
                     pageRangeDisplayed={4}
                     onPageChange={(val) => {
