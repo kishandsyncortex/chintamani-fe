@@ -24,7 +24,7 @@ const Order: React.FC = () => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const orderData = await apiAction({
+        let orderData = await apiAction({
           method: "get",
           url: `${apiPath?.order?.getOrder}/${user?.id}`,
           headers: { Authorization: `Bearer ${token}` },
@@ -33,7 +33,7 @@ const Order: React.FC = () => {
             pageSize: limit.toString(),
           },
         });
-
+        orderData.data.responceData = flattenedArray(orderData.data.responceData);
         dispatch(setOrder(orderData));
       } catch (error) {
         console.error(error);
@@ -48,7 +48,41 @@ const Order: React.FC = () => {
     setCurrentPage(data.selected);
   };
 
-  const displayedFields = ["id", "totalprice", "orderstatus", "payment"];
+  interface NestedObject {
+    [key: string]: any;
+  }
+  
+  const flattenObject = (obj: NestedObject, prefix = ''): NestedObject => {
+    const result: NestedObject = {};
+  
+    for (const key in obj) {
+      if (obj.hasOwnProperty(key)) {
+        const newKey = prefix ? `${prefix}_${key}` : key;
+  
+        if (typeof obj[key] === 'object' && obj[key] !== null) {
+          Object.assign(result, flattenObject(obj[key], newKey));
+        } else {
+          result[newKey] = obj[key];
+        }
+      }
+    }
+  
+    return result;
+  };
+  
+  const flattenedArray = (arrayOfObjects: NestedObject[]) => {
+    console.log(arrayOfObjects.map(obj => flattenObject(obj)), "arrayOfObjects.map(obj => flattenObject(obj))")
+    return arrayOfObjects.map(obj => flattenObject(obj));
+  };
+  
+  const displayedFields = {
+    Id: "id",
+    Price: "totalprice",
+    OrderStatus: "orderstatus",
+    Payment: "payment",
+    Currency: "orderDetails_currency",
+  };
+
 
   const getColorClass = (status: number): string => {
     switch (status) {
@@ -101,46 +135,39 @@ const Order: React.FC = () => {
   };
 
   const renderHeaders = () => {
-    if (!data?.responceData || data?.responceData.length === 0) return null;
-
-    const headers = Object.keys(data?.responceData[0]);
-
+    const headers = Object.keys(displayedFields);
+  
     return (
       <tr className="bg-gray-100">
-        {headers
-          .filter((header) => displayedFields.includes(header))
-          .map((header) => (
-            <th
-              key={header}
-              className="py-2 px-4 border-b border-gray-300 font-medium text-sm text-gray-700 text-left"
-            >
-              {header}
-            </th>
-          ))}
+        {headers.map((header) => (
+          <th
+            key={header}
+            className="py-2 px-4 border-b border-gray-300 font-medium text-sm text-gray-700 text-left"
+          >
+            {header}
+          </th>
+        ))}
       </tr>
     );
   };
-
+  
   const renderCells = () => {
-    if (!data?.responceData || data?.responceData.length === 0) return null;
-
     return data?.responceData.map((order: any) => (
       <tr key={order.id} className="border-b border-gray-300">
-        {Object.entries(order)
-          .filter(([key]) => displayedFields.includes(key))
-          .map(([key, value], index) => (
-            <td
-              key={index}
-              className={`py-2 px-4 text-sm ${
-                typeof value === "number" ? getColorClass(value) : ""
-              }`}
-            >
-              {statusText(key, value)}
-            </td>
-          ))}
+        {Object.entries(displayedFields).map(([key, value], index) => (
+          <td
+            key={index}
+            className={`py-2 px-4 text-sm ${
+              typeof order[value] === "number" ? getColorClass(order[value]) : ""
+            }`}
+          >
+            {statusText(value, order[value])}
+          </td>
+        ))}
       </tr>
     ));
   };
+  
 
   return (
     <>

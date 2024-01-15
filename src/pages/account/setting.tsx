@@ -107,7 +107,7 @@ const Setting = () => {
           <button
             onClick={handleSubmit}
             type="button"
-            className="text-center w-full py-4 bg-[#605b98] hover:bg-[#393376] rounded-md text-white"
+            className="text-center w-full py-4 bg-[#605b98] hover:bg-[#211c50] rounded-md text-white"
           >
             UPDATE PASSWORD
           </button>
