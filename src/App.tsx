@@ -36,6 +36,7 @@ import Blogs from "./pages/Blog";
 import Faqs from "./pages/Faq";
 import Account from "./pages/account";
 import BlogDetails from "./pages/Blog/blogDetails";
+import TermsCondition from "./pages/terms-conditions";
 
 
 
@@ -77,9 +78,14 @@ const router = createBrowserRouter([
         path: "blog",
         element: <Blogs />,
       },
+   
       {
         path: "faq",
         element: <Faqs />,
+      },
+      {
+        path: "terms-condition",
+        element: <TermsCondition />,
       },
       {
         path: "account",

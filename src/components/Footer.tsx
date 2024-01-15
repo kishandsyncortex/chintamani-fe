@@ -110,7 +110,7 @@ const Footer: FC = () => {
                   <Link to={"/"}>Home</Link>
                 </li>
                 <li>
-                  <Link to={""}>FAQ</Link>
+                  <Link to={"/faq"}>FAQ</Link>
                 </li>
                 <li>
                   <Link to={"/blog"}>Blog</Link>
@@ -119,7 +119,7 @@ const Footer: FC = () => {
                   <Link to={"/contact"}>Contact Us</Link>
                 </li>
                 <li>
-                  <Link to={""}>Terms Conditions</Link>
+                  <Link to={"/terms-condition"}>Terms Conditions</Link>
                 </li>
               </ul>
             </div>
