@@ -23,7 +23,7 @@ const Index = () => {
 
             <span className="self-center flex w-full max-w-[1454px] flex-col items-center my-20 max-md:max-w-full max-md:mt-10">
                 <div className="justify-center text-neutral-700 text-base font-semibold leading-6 whitespace-nowrap">
-                    Home<span className=" text-neutral-700"> / FAQ</span>
+                    Home<span className=" text-neutral-500"> / FAQ</span>
                 </div>
                 <div className="justify-center text-neutral-700 text-2xl font-bold leading-10 whitespace-nowrap mt-32 max-md:mt-10">
                     Table of Contents
@@ -31,7 +31,10 @@ const Index = () => {
                 <div className="justify-center text-black text-base font-semibold leading-7 mt-4">
                     General Options
                     <br />
+                   <a href="#question-1" onClick={() => setOpen([...open, 2])}>
                     User Account
+
+                   </a>
                     <br />
                     Shipping Methods
                     <br />
@@ -41,7 +44,7 @@ const Index = () => {
                     Frequently Asked Questions
                 </div>
                 {faqsArray?.map(({ question, answer }, i) => (
-                    <span className="justify-center items-stretch border-t-neutral-200 self-stretch flex flex-col  py-7 border-t border-solid max-md:max-w-full">
+                    <div id={`question-${i + 1}`} className="justify-center items-stretch border-t-neutral-200 self-stretch flex flex-col  py-7 border-t border-solid max-md:max-w-full">
                         <span className="flex items-stretch justify-between gap-5 max-md:max-w-full max-md:flex-wrap">
                             <div className="justify-center text-neutral-700 text-2xl font-bold leading-6 grow shrink basis-auto max-md:max-w-full">
                                 {question}
@@ -65,7 +68,7 @@ const Index = () => {
                             </div>
 
                         </span> : null}
-                    </span>
+                    </div>
 
                 ))}
             
