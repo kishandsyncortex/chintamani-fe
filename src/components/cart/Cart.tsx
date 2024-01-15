@@ -73,7 +73,7 @@ const Index = () => {
                 let product = products?.product || products
                 let qty = products?.quantity
                 return <div className="justify-between mb-6 rounded-lg bg-white p-4 shadow-md sm:flex sm:justify-start">
-                  <img src={product?.productimage} alt="product-image" className="w-[100px] rounded-lg " />
+                  <img src={product?.productimage[0]} alt="product-image" className="w-[100px] rounded-lg " />
                   <div className="sm:ml-4 sm:flex sm:w-full sm:justify-between">
                     <div className="mt-5 sm:mt-0">
                       <h2 className="text-lg font-bold text-gray-900">{product?.title}</h2>

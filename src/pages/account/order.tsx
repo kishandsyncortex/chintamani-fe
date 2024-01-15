@@ -112,7 +112,7 @@ const Order: React.FC = () => {
           .map((header) => (
             <th
               key={header}
-              className="py-2 px-4 border-b border-gray-300 font-medium text-sm text-gray-700"
+              className="py-2 px-4 border-b border-gray-300 font-medium text-sm text-gray-700 text-left"
             >
               {header}
             </th>
@@ -143,25 +143,35 @@ const Order: React.FC = () => {
   };
 
   return (
-    <div>
-      <table className="min-w-full bg-white border border-gray-300">
-        <thead>{renderHeaders()}</thead>
-        <tbody>{renderCells()}</tbody>
-      </table>
+    <>
+      {loading ? (
+        <div className="flex items-center justify-center h-16">
+          <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-blue-500"></div>
+          <span className="ml-2">Loading...</span>
+        </div>
+      ) : (
+        <div className="">
+          <table className="min-w-full bg-white border border-gray-300">
+            <thead>{renderHeaders()}</thead>
+            <tbody>{renderCells()}</tbody>
+          </table>
 
-      <ReactPaginate
-        previousLabel={"<"}
-        nextLabel={">"}
-        breakLabel={"..."}
-        breakClassName={"break-me"}
-        pageCount={Math.ceil(data?.total / limit)}
-        marginPagesDisplayed={2}
-        pageRangeDisplayed={5}
-        onPageChange={handlePageClick}
-        containerClassName={"pagination mt-4"}
-        activeClassName={"active"}
-      />
-    </div>
+          <ReactPaginate
+            previousLabel={"<"}
+            nextLabel={">"}
+            breakLabel={"..."}
+            breakClassName={"break-me"}
+            pageCount={Math.ceil(data?.total / limit)}
+            marginPagesDisplayed={2}
+            pageRangeDisplayed={5}
+            onPageChange={handlePageClick}
+            containerClassName={"pagination mt-4"}
+            activeClassName={"active"}
+            forcePage={currentPage}  
+          />
+        </div>
+      )}
+    </>
   );
 };
 
