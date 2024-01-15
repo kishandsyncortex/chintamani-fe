@@ -43,7 +43,8 @@ export const apiPath = {
         register:"user/create",
         forgotPassword:"user/forgetpassword",
         verifyOTP:"user/verification/forgetpassword",
-        createPassword:"user/create_password"
+        createPassword:"user/create_password",
+        changePassword:"user/change_password",
     },
     contactUs:{
       create:"contact/create"
