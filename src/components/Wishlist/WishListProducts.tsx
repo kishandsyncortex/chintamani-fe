@@ -30,7 +30,7 @@ const WishListProducts = () => {
         {wishListProduct?.length ? wishListProduct?.map((products: any) => {
           let product = products?.product || products
           return <div className="justify-between  rounded-lg bg-white p-4 border-b-[1px] border-gray-200 sm:flex sm:justify-start items-center">
-            <img src={product?.productimage} alt="product-image" className="w-[100px] rounded-lg h-[90px] " />
+            <img src={product?.productimage[0]} alt="product-image" className="w-[100px] rounded-lg h-[90px] " />
             <div className="sm:ml-4 sm:flex sm:w-full sm:justify-between">
               <div className="mt-5 sm:mt-0 flex flex-col gap-2">
                 <h2 className="text-lg font-bold text-gray-900">{product?.title}</h2>

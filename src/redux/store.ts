@@ -4,11 +4,13 @@ import { persistStore, persistReducer } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
 import auth from './reducer/auth'
 import cart from './reducer/cart'
+import order from './reducer/order'
 
 let rootReducer:any = combineReducers({
   category:category,
   auth:auth,
-  cart:cart
+  cart:cart,
+  order:order
 })
 
 const persistConfig = {

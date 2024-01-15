@@ -21,7 +21,7 @@ const SideComponent = () => {
         setError({ ...error, [name]: "" })
     }
     const onAddress = () => {
-        let err: any = {}
+        let err: any = {}z
         if (!address?.city) {
             err = { ...err, city: "Please enter city" }
         }

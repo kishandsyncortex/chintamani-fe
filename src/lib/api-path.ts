@@ -47,6 +47,13 @@ export const apiPath = {
     },
     contactUs:{
       create:"contact/create"
+    },
+    checkOut: {
+      createOrder: "order/create",
+      updateOrder: "order/update"
+    },
+    order: {
+      getOrder: "order/user_order"
     }
    
   }

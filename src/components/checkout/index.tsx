@@ -1,37 +1,157 @@
-import  { useEffect } from 'react'
-import { useSelector } from 'react-redux'
-import PaymentComponent from './PaymentComponent'
-import SideComponent from './SideComponent'
+import React, { useCallback, useState } from "react";
+import SideComponent from "./SideComponent";
+import useRazorpay from "react-razorpay";
+import useApi from "@/hooks/useApi";
+import { apiPath } from "@/lib/api-path";
+import { useDispatch, useSelector } from "react-redux";
+import { showToast } from "@/lib/utils";
+import { addCartProduct } from "@/redux/reducer/cart";
+
+const VITE_RAZORPAY_KEY_ID = import.meta.env.VITE_RAZORPAY_KEY_ID;
+const VITE_RAZORPAY_KEY_SECRET = import.meta.env.VITE_RAZORPAY_KEY_SECRET;
 
 const CheckoutComponent = () => {
-    const {  cart: { cartProduct } } = useSelector((state: any) => state)
+  const dispatch = useDispatch();
+  const [address, setAddress] = useState({});
+  const [contact, setContact] = useState();
+  const [isSave, setIsSave] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
-    const handleTotalAmount = () => {
-        const totalAmount = cartProduct?.reduce((prev: number, products: any) => {
-            let product = products?.product || products
-            return prev + (product?.quantity || 1) * product?.price
-        }, 0)
-        return totalAmount
+  const {
+    auth: { user, token },
+    cart: { cartProduct },
+  } = useSelector((state: any) => state);
 
+  const handleTotalAmount = () => {
+    const totalAmount = cartProduct?.reduce((prev: number, products: any) => {
+      let product = products?.product || products;
+      let qty = products?.quantity;
+      return (
+        prev +
+        (products?.quantity || 1) * (product?.disccount_price || product?.price)
+      );
+    }, 0);
+    return totalAmount;
+  };
+
+  const [Razorpay] = useRazorpay();
+
+  //   const {
+  //     auth: { token, user }
+  //   } = useSelector((state: { auth: any }) => state);
+  const { apiAction } = useApi();
+
+  //   const createOrder = async (params: any) => {
+  //     try {
+  //       const data = await apiAction({
+  //         method: "post",
+  //         url: `${apiPath?.checkOut?.createOrder}`,
+  //         data: { userid: params?.userid, totalprice: params?.totalprice },
+  //         headers: { Authorization: `Bearer ${token}` },
+  //       });
+  //       return data;
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   };
+
+  const createOrder = async (params: any) => {
+    try {
+      // First API call to create an order
+      const data = await apiAction({
+        method: "post",
+        url: `${apiPath?.checkOut?.createOrder}`,
+        data: { userid: params?.userid, totalprice: params?.totalprice },
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      const fetchCartData = async () => {
+        const cartData = await apiAction({
+          method: "get",
+          url: `${apiPath?.user?.allCart}/${user?.id}`,
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        if (cartData) {
+          dispatch(addCartProduct(cartData?.data));
+        }
+      };
+
+      await fetchCartData();
+
+      return data;
+    } catch (error) {
+      console.log(error);
     }
+  };
 
-    useEffect(() => {
-        // updateProduct()
-    }, [])
+  const handlePayment = useCallback(async () => {
+    setIsLoading(true);
 
-   
+    try {
+      const params = { userid: user?.id, totalprice: handleTotalAmount() };
+      const order = await createOrder(params);
 
-    return (
-        <div className='container mx-auto'>
+      const options = {
+        key: VITE_RAZORPAY_KEY_ID,
+        secret: VITE_RAZORPAY_KEY_SECRET,
+        amount: order.data.orderDetails.amount_due,
+        currency: "USD",
+        name: "Acme Corp",
+        description: "Test Transaction",
+        order_id: order.data.orderDetails.id,
+        handler: (res) => {
+          console.log(res, "ress++");
+          updateOrder(order?.data?.id);
+        },
+        prefill: {
+          name: `${user.firstname} ${user.lastname}`,
+          email: user.email,
+          contact: contact,
+          // method: "netbanking"
+        },
+        notes: {
+          address: "Razorpay Corporate Office",
+        },
+        theme: {
+          color: "#3399cc",
+        },
+      };
 
-            <div className="w-full bg-white border-t border-b border-gray-200 px-5 py-10 text-gray-800">
-                <div className="w-full">
-                    <div className="-mx-3 md:flex items-start">
-                        <div className="px-3 md:w-5/12">
-                            <SideComponent />
+      const rzpay = new Razorpay(options);
+      rzpay.open();
+    } catch (error) {
+      console.error("Error handling payment:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [createOrder, handleTotalAmount, user, setIsLoading]);
 
-                            <PaymentComponent />
-                            {/* <div className="w-full mx-auto rounded-lg bg-white border border-gray-200 text-gray-800 font-light mb-6">
+  const updateOrder = async (orderid) => {
+    apiAction({
+      method: "patch",
+      url: `${apiPath?.checkOut?.updateOrder}`,
+      data: { payment: 2, Address: Object.values(address).join(", ") , orderid},
+      headers: { Authorization: `Bearer ${token}` },
+    });
+  };
+
+  return (
+    <div className="container mx-auto">
+      <div className="w-full bg-white border-t border-b border-gray-200 px-5 py-10 text-gray-800">
+        <div className="w-full">
+          <div className="-mx-3 md:flex items-start">
+            <div className="px-3 md:w-5/12">
+              <SideComponent
+                address={address}
+                setAddress={setAddress}
+                contact={contact}
+                setContact={setContact}
+                setIsSave={setIsSave}
+              />
+
+              {/* <PaymentComponent totalPrice={handleTotalAmount()}/> */}
+              {/* <div className="w-full mx-auto rounded-lg bg-white border border-gray-200 text-gray-800 font-light mb-6">
                                 <div className="w-full p-3 border-b border-gray-200">
                                     <div className="mb-5">
                                         <label htmlFor="type1" className="flex items-center cursor-pointer">
@@ -102,35 +222,68 @@ const CheckoutComponent = () => {
                                     </label>
                                 </div>
                             </div> */}
-                            <div>
-                                <button className="block w-full max-w-xs mx-auto bg-indigo-500 hover:bg-indigo-700 focus:bg-indigo-700 text-white rounded-lg px-3 py-2 font-semibold"><i className="mdi mdi-lock-outline mr-1"></i> PAY NOW</button>
-                            </div>
-                        </div>
-                        <div className="px-3 md:w-7/12 lg:pr-10">
-                            {
-                                cartProduct?.map((prod:any)=> {
-                                    let product = prod?.product || prod
-                                    console.log("🚀 ~ CheckoutComponent ~ product:", product)
-                                    return (
-                                        <div className="w-full mx-auto text-gray-800 font-light mb-6 border-b border-gray-200 pb-6">
-                                            <div className="w-full flex items-center">
-                                                <div className="overflow-hidden rounded-lg w-16 h-16 bg-gray-50 border border-gray-200">
-                                                    <img src={product?.productimage?.[0]} className='object-fill h-full' alt="" />
-                                                </div>
-                                                <div className="flex-grow pl-3">
-                                                    <h6 className="font-semibold uppercase text-gray-600">{product?.maintitle}</h6>
-                                                    <p className="text-gray-400">{product?.quantity || 1}</p>
-                                                </div>
-                                                <div>
-                                                    <span className="font-semibold text-gray-600 text-xl">${product?.price}</span><span className="font-semibold text-gray-600 text-sm">.00</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    )
-
-                                })
-                            }
-                            {/* <div className="mb-6 pb-6 border-b border-gray-200">
+              <div>
+                <button
+                  style={{ opacity: isSave ? 1 : 0.5 }}
+                  className="block w-full max-w-xs mx-auto bg-indigo-500 hover:bg-indigo-700 focus:bg-indigo-700 text-white rounded-lg px-3 py-2 font-semibold relative"
+                  disabled={!isSave || isLoading}
+                  onClick={handlePayment}
+                >
+                  {isLoading && (
+                    <div className="absolute top-0 left-0 right-0 bottom-0 flex items-center justify-center">
+                      <div className="animate-spin rounded-full h-6 w-6 border-t-4 border-white-700"></div>
+                    </div>
+                  )}
+                  <i className="mdi mdi-lock-outline mr-1"></i>{" "}
+                  {!isLoading && <>PAY NOW</>}
+                </button>
+              </div>
+            </div>
+            <div className="px-3 md:w-7/12 lg:pr-10">
+              {cartProduct?.map((prod) => {
+                let product = prod?.product || prod;
+                let qty = prod?.quantity || 1;
+                console.log("🚀 ~ CheckoutComponent ~ product:", product);
+                return (
+                  <div className="w-full mx-auto text-gray-800 font-light mb-6 border-b border-gray-200 pb-6">
+                    <div className="w-full flex items-center">
+                      <div className="overflow-hidden rounded-lg w-16 h-16 bg-gray-50 border border-gray-200">
+                        <img
+                          src={product?.productimage?.[0]}
+                          className="object-fill h-full"
+                          alt=""
+                        />
+                      </div>
+                      <div className="flex-grow pl-3">
+                        <h6 className="font-semibold uppercase text-gray-600">
+                          {product?.maintitle}
+                        </h6>
+                        <p className="text-gray-400">{qty}</p>
+                      </div>
+                      <div>
+                        {product?.disccount_price ? (
+                          <>
+                            <del>${product?.price}</del>&nbsp;
+                            <span className="font-semibold text-gray-600 text-xl">
+                              ${product?.disccount_price}
+                            </span>
+                          </>
+                        ) : (
+                          <>
+                            <span className="font-semibold text-gray-600 text-xl">
+                              ${product?.price}
+                            </span>
+                            <span className="font-semibold text-gray-600 text-sm">
+                              .00
+                            </span>
+                          </>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+              {/* <div className="mb-6 pb-6 border-b border-gray-200">
                                 <div className="-mx-2 flex items-end justify-end">
                                     <div className="flex-grow px-2 lg:max-w-xs">
                                         <label className="text-gray-600 font-semibold text-sm mb-2 ml-1">Discount code</label>
@@ -143,7 +296,7 @@ const CheckoutComponent = () => {
                                     </div>
                                 </div>
                             </div> */}
-                            {/* <div className="w-full flex mb-3 items-center">
+              {/* <div className="w-full flex mb-3 items-center">
                                     <div className="flex-grow">
                                         <span className="text-gray-600">Subtotal</span>
                                     </div>
@@ -151,7 +304,7 @@ const CheckoutComponent = () => {
                                         <span className="font-semibold">${handleTotalAmount()}</span>
                                     </div>
                                 </div> */}
-                            {/* <div className="w-full flex items-center">
+              {/* <div className="w-full flex items-center">
                                     <div className="flex-grow">
                                         <span className="text-gray-600">Taxes (GST)</span>
                                     </div>
@@ -159,23 +312,27 @@ const CheckoutComponent = () => {
                                         <span className="font-semibold">$19.09</span>
                                     </div>
                                 </div> */}
-                            <div className="mb-6 pb-6 border-b border-gray-200 md:border-none text-gray-800 text-xl">
-                                <div className="w-full flex items-center">
-                                    <div className="flex-grow">
-                                        <span className="text-gray-600">Total</span>
-                                    </div>
-                                    <div className="pl-3">
-                                        <span className="font-semibold text-gray-400 text-sm">AUD</span> <span className="font-semibold">${handleTotalAmount()}</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
+              <div className="mb-6 pb-6 border-b border-gray-200 md:border-none text-gray-800 text-xl">
+                <div className="w-full flex items-center">
+                  <div className="flex-grow">
+                    <span className="text-gray-600">Total</span>
+                  </div>
+                  <div className="pl-3">
+                    <span className="font-semibold text-gray-400 text-sm">
+                      AUD
+                    </span>{" "}
+                    <span className="font-semibold">
+                      ${handleTotalAmount()}
+                    </span>
+                  </div>
                 </div>
+              </div>
             </div>
+          </div>
         </div>
-    )
-}
+      </div>
+    </div>
+  );
+};
 
-export default CheckoutComponent
+export default CheckoutComponent;

@@ -4,6 +4,7 @@ import { addCartProduct, addQuantity, setOpenCart } from '@/redux/reducer/cart'
 import  { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import RemovePopup from '../alert/RemovePopup'
+import { useNavigate } from 'react-router'
 
 const Index = () => {
   const { cart: { cartProduct, openCart }, auth: { token, user } } = useSelector((state: { cart: any, auth: any }) => state)
@@ -12,6 +13,7 @@ const Index = () => {
   const { apiAction } = useApi()
   const [openPopup, setOpenPopup] = useState('')
 
+  const navigate = useNavigate()
   const addToCart = async (id: string, quantity: number) => {
     const data = await apiAction({ method: "post", url: `${apiPath?.product?.updateCart}`, data: { userid: user?.id, productid: id, quantity: quantity }, headers: { "Authorization": `Bearer ${token}` } })
     if (!data?.data?.error) {
@@ -32,7 +34,8 @@ const Index = () => {
   const handleTotalAmount = () => {
     const totalAmount = cartProduct?.reduce((prev: number, products: any) => {
       let product = products?.product || products
-      return prev + (product?.quantity || 1) * product?.price
+      let qty = products?.quantity
+      return prev + (qty || 1) * (product?.disccount_price || product?.price)
     }, 0)
     return totalAmount
   }
@@ -68,17 +71,17 @@ const Index = () => {
             <div className="rounded-lg md:w-full">
               {cartProduct?.length ? cartProduct?.map((products: any) => {
                 let product = products?.product || products
-                console.log("🚀 ~ {cartProduct?.length?cartProduct?.map ~ product?.quantity:", product?.quantity,typeof product?.quantity)
+                let qty = products?.quantity
                 return <div className="justify-between mb-6 rounded-lg bg-white p-4 shadow-md sm:flex sm:justify-start">
-                  <img src={product?.productimage} alt="product-image" className="w-[100px] rounded-lg " />
+                  <img src={product?.productimage[0]} alt="product-image" className="w-[100px] rounded-lg " />
                   <div className="sm:ml-4 sm:flex sm:w-full sm:justify-between">
                     <div className="mt-5 sm:mt-0">
                       <h2 className="text-lg font-bold text-gray-900">{product?.title}</h2>
-                      <p className="text-sm">${product?.price}</p>
+                      <p className="text-sm">${product?.disccount_price || product?.price}</p>
                       <div className="flex items-center border-gray-100 justify-start my-2">
-                        <button onClick={() => handleProductQuantity(product?.id, product?.quantity - 1)} disabled={product?.quantity === "undefined" || !product?.quantity || product?.quantity === 1 ? true : false} className="cursor-pointer rounded-l bg-gray-100 py-1 px-3.5 duration-100 hover:bg-blue-500 hover:text-blue-50"> - </button>
-                        <input className="h-8 w-8 border bg-white text-center text-xs outline-none" type="number" value={product?.quantity?.toString() || ""} min="1" onChange={(e) => handleProductQuantity(product?.id, Number(e.target.value ? e.target.value : ""))} />
-                        <button onClick={() => handleProductQuantity(product?.id, Number(product?.quantity) + 1)} className="cursor-pointer rounded-r bg-gray-100 py-1 px-3 duration-100 hover:bg-blue-500 hover:text-blue-50"> + </button>
+                        <button onClick={() => handleProductQuantity(product?.id, qty - 1)} disabled={qty === "undefined" || !qty || qty === 1 ? true : false} className="cursor-pointer rounded-l bg-gray-100 py-1 px-3.5 duration-100 hover:bg-blue-500 hover:text-blue-50"> - </button>
+                        <input className="h-8 w-8 border bg-white text-center text-xs outline-none" type="number" value={qty?.toString() || ""} min="1" onChange={(e) => handleProductQuantity(product?.id, Number(e.target.value ? e.target.value : ""))} />
+                        <button onClick={() => handleProductQuantity(product?.id, Number(qty) + 1)} className="cursor-pointer rounded-r bg-gray-100 py-1 px-3 duration-100 hover:bg-blue-500 hover:text-blue-50"> + </button>
                       </div>
                     </div>
                     <div className="mt-1 ml-2 flex justify-between sm:space-y-6  sm:block sm:space-x-6">
@@ -115,7 +118,7 @@ const Index = () => {
                   <p className="mb-1 text-lg font-bold">${handleTotalAmount()} USD</p>
                 </div>
               </div>
-              <button className="mt-6 w-full rounded-md bg-blue-500 py-1.5 font-medium text-blue-50 hover:bg-blue-600">Check out</button>
+              <button className="mt-6 w-full rounded-md bg-blue-500 py-1.5 font-medium text-blue-50 hover:bg-blue-600" onClick={() => {navigate("/checkout"), dispatch(setOpenCart())}}>Check out</button>
             </div> : null}
           </div>
 

@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
 import Profile from './profile'
+import Order from './order'
+import Setting from './setting'
 
 const Index = () => {
 const [activeTab,setActiveTab] = useState("Profile")
@@ -13,9 +15,9 @@ const renderView = () => {
         case "Profile":
             return <Profile />
         case "My Orders":
-            return <div>My Orders</div>
+            return <Order />
         case "Settings":
-            return <div>Settings</div>
+            return <Setting />
         default:
             return <div>Profile</div>
     }
