@@ -5,8 +5,8 @@ import useApi from '@/hooks/useApi';
 import { apiPath } from '@/lib/api-path';
 
 const Diamond: FC = () => {
-    const {apiAction} = useApi()
-    const [ banners, setBanners ] = useState([])
+    const { apiAction } = useApi()
+    const [banners, setBanners] = useState([])
     console.log("🚀 ~ banners:", banners)
     const settings = {
         dots: false,
@@ -18,31 +18,30 @@ const Diamond: FC = () => {
     };
 
     useEffect(() => {
-      getBanners()
+        getBanners()
     }, [])
-    
-    const getBanners = async () => {
-      let data =   await apiAction({ method: "get", url: `${apiPath?.banners?.all}` })
-      if(data){
-          setBanners(data?.data?.Blogdata)
 
-      }
+    const getBanners = async () => {
+        let data = await apiAction({ method: "get", url: `${apiPath?.banners?.all}` })
+        if (data) {
+            setBanners(data?.data?.Blogdata)
+
+        }
     }
-    
 
     return (
-        <div className='w-full diamond-sec mt-10'>
+        <div className='w-full diamond-sec'>
             <Slider {...settings}>
-                {banners?.map((banner)=>{
+                {banners?.map((banner) => {
                     return (
                         <div>
-                        <div className={` h-[631px] bg-no-repeat bg-cover !flex flex-col justify-center bg-center`}    style={{ backgroundImage: `url('${banner?.image}')` }}>
-                        <div className='lg:pl-[15%] md:pl-[12%] sm:pl-[9%] pl-[20px]'>
-                            <h1 className='text-[#fff] text-[55px] font-medium'>{banner?.title}</h1>
-                            <div className='text-[#fff] text-[16px font-medium pt-[10px] lg:w-[440px] md:w-[440px] sm:w-[440px] w-full'>{banner?.description}</div>
-                            <Button variant={"secondary"} className='mt-[25px] hover:bg-[#211c50] font-poppins text-[17px] font-medium rounded-[10px] py-2 px-[25px] text-[#000] bg-[#fff] border-[1px] border-[#fff] outline-none hover:text-[#fff] hover:border-[#211c50]'>Purchase Now</Button>
-                        </div>
-                    </div>
+                            <div className={` h-[631px] bg-no-repeat bg-cover !flex flex-col justify-center bg-center`} style={{ backgroundImage: `url('${banner?.image}')` }}>
+                                <div className='lg:pl-[15%] md:pl-[12%] sm:pl-[9%] pl-[20px]'>
+                                    <h1 className='text-[#fff] lg:text-[55px] md:text-[30px] text-[30px] font-medium'>{banner?.title}</h1>
+                                    <div className='text-[#fff] text-[16px font-medium pt-[10px] lg:w-[440px] md:w-[440px] sm:w-[440px] w-full'>{banner?.description}</div>
+                                    <Button variant={"secondary"} className='mt-[25px] hover:bg-[#211c50] font-poppins text-[17px] font-medium rounded-[10px] py-2 px-[25px] text-[#000] bg-[#fff] border-[1px] border-[#fff] outline-none hover:text-[#fff] hover:border-[#211c50]'>Purchase Now</Button>
+                                </div>
+                            </div>
 
                         </div>
                     )
