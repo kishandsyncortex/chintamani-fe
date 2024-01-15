@@ -1,6 +1,6 @@
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { createBrowserRouter, Navigate, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import ShopItem from "./components/ShopProduct/ShopItem";
 import RootLayout from "./components/layout/RootLayout";
 import Home from "./components/Home";
@@ -22,16 +22,13 @@ import PearShape from "./components/diamondshape/PearShape";
 import MarquiseShape from "./components/diamondshape/MarquiseShape";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { Provider, useSelector } from 'react-redux'
+import { Provider } from 'react-redux'
 import { persistor, store } from "./redux/store";
 import { PersistGate } from 'redux-persist/integration/react'
 import Diamonds from "./components/common/Diamonds";
-import { showErrorToast, showToast } from "./lib/utils";
-import { FC, ReactNode, useEffect } from "react";
 import Login from "./pages/auth/login";
 import WishList from "./pages/wishlist";
 import SignUp from "./pages/auth/sign-up";
-import UserVerification from "./pages/auth/UserVerification";
 import Forgotpassword from "./pages/auth/forgot-password";
 import ProductDetails from "./pages/Product/ProductDetails";
 import Checkout from "./pages/checkout";
@@ -41,24 +38,7 @@ import BlogDetails from "./pages/Blog/blogDetails";
 
 
 
-interface ProtectedRouteProps {
-  children: ReactNode;
-  errorMessage?: string;
-}
 
-const ProtectedRoute: FC<ProtectedRouteProps> = ({
-  children,
-  errorMessage,
-}) => {
-  const { token } = useSelector((state: { auth: any; }) => state.auth);
-
-  if (!token) {
-    // setOpenSignin(true);
-    showErrorToast("Unauthorized");
-    return <Navigate to={"/login"} />;
-  }
-  return <>{children}</>;
-};
 
 
 const router = createBrowserRouter([

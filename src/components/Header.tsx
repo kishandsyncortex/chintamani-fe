@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import {  useEffect, useState } from "react";
 import MainLogo from "../../public/assests/Images/main-logo.png";
 import LogoShape from "../../public/assests/Images/logo-shape.png";
 
@@ -11,7 +11,6 @@ import {
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
 import { Link, useNavigate } from "react-router-dom";
-import api from "@/services/api";
 import { apiPath } from "@/lib/api-path";
 import { Category, subCategory } from "@/lib/interfaces/category";
 import { useDispatch, useSelector } from "react-redux";

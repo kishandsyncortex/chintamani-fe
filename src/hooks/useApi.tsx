@@ -1,7 +1,7 @@
 import { showErrorToast, showToast } from '@/lib/utils';
 import { handleLogout } from '@/redux/reducer/auth';
 import axios from 'axios';
-import React, { ReactNode, useEffect, useState } from 'react'
+import {  useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux';
 
 interface AxiosParams {

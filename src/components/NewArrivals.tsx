@@ -1,8 +1,5 @@
 import { FC, useEffect, useState } from "react";
 import K1 from "../../public/assests/Images/k1.png";
-import Arrive from "../../public/assests/Images/arrive1.png";
-import blackDImg from "../../public/assests/Images/blackD.png";
-import neklessImg from "../../public/assests/Images/nekless.png";
 import { Button } from "./ui/button";
 import useApi from "@/hooks/useApi";
 import { apiPath } from "@/lib/api-path";

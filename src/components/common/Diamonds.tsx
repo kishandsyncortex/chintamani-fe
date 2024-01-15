@@ -2,25 +2,18 @@ import { useEffect, useState } from "react";
 import Sidebar from "./Sidebar";
 import ProductHeader from "./ProductHeader";
 import { convertObjectToURL } from "@/lib/utils";
-import { useDispatch, useSelector } from "react-redux";
+import {  useSelector } from "react-redux";
 import ReactPaginate from 'react-paginate';
 import ProductList from "./ProductList";
 import { apiPath } from "@/lib/api-path";
-import useCheckPermission from "@/hooks/useCheckPermission";
 import useApi from "@/hooks/useApi";
 
 const Diamonds = () => {
-  const [minValue, setMinValue] = useState(0);
-  const [maxValue, setMaxValue] = useState(0);
-  const [minValue2, setMinValue2] = useState(0);
-  const [maxValue2, setMaxValue2] = useState(0);
   const [totalRecords, setTotalRecords] = useState(0);
   const [limit] = useState(10);
-  const [currentPage, setCurrentPage] = useState(1);
   const [filter, setFilter] = useState<any>({});
   const [products, setProducts] = useState([]);
   const { category: { category } } = useSelector((state: any) => state)
-  const dispatch = useDispatch()
   // const { token, user } = useCheckPermission()
   const { apiAction } = useApi()
 
@@ -33,9 +26,9 @@ const Diamonds = () => {
       window.scrollTo(0, 0)
       let currCategory = category?.[category?.length - 1]
       if (currCategory?.id)
-        setFilter({ [`${currCategory?.name?.toLowerCase()}`]: currCategory?.id, page: currentPage, pageSize: limit })
+        setFilter({ [`${currCategory?.name?.toLowerCase()}`]: currCategory?.id, page: 1, pageSize: limit })
       else{
-        setFilter({ page: currentPage, pageSize: limit })
+        setFilter({ page: 1, pageSize: limit })
       }
       // setFilter({ [`${currCategory?.name?.toLowerCase()}`]: currCategory?.id,mincarat:1,maxcarat:100 })
 
@@ -67,11 +60,11 @@ const Diamonds = () => {
       <div className="pt-[35px] pb-[20px] flex flex-col items-start px-[20px] container">
         <ProductHeader submitHandler={() => { }} />
         <div className="flex w-full items-stretch justify-center flex-wrap">
-          <Sidebar setMinValue={setMinValue} setMaxValue={setMaxValue} setMinValue2={setMinValue2} setMaxValue2={setMaxValue2} setFilter={setFilter} filter={filter}></Sidebar>
+          <Sidebar  setFilter={setFilter} filter={filter}></Sidebar>
           <div className="w-[80%] flex flex-col flex-nowrap items-start p-[20px] pr-[0]">
             <div className="w-full">
               <p className="py-[8px] text-base font-poppins font-normal text-[#404040] mb-[16px] float-left">
-                showing {totalRecords ? limit * currentPage - 9 : 0}-{(limit * currentPage < totalRecords ? limit * currentPage : totalRecords) ?? 0} of {totalRecords ?? 0} results
+                showing {totalRecords ? limit * (filter?.page||1) - 9 : 0}-{(limit * (filter?.page||1) < totalRecords ? limit * (filter?.page||1) : totalRecords) ?? 0} of {totalRecords ?? 0} results
 
               </p>
               <form action="" className="float-right mb-[16px] relative">

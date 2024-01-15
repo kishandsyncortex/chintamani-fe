@@ -3,7 +3,7 @@ import footerLogo from "../../public/assests/Images/LogoFooter.png";
 import Payment from "../../public/assests/Images/Payment.png";
 import { Link, useNavigate } from "react-router-dom";
 import { setCategory } from "@/redux/reducer/category";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch} from "react-redux";
 import useApi from "@/hooks/useApi";
 import { apiPath } from "@/lib/api-path";
 
