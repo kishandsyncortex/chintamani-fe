@@ -1,10 +1,10 @@
-import React, { useEffect } from 'react'
+import  { useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import PaymentComponent from './PaymentComponent'
 import SideComponent from './SideComponent'
 
 const CheckoutComponent = () => {
-    const { auth: { user, token }, cart: { cartProduct } } = useSelector((state: any) => state)
+    const {  cart: { cartProduct } } = useSelector((state: any) => state)
 
     const handleTotalAmount = () => {
         const totalAmount = cartProduct?.reduce((prev: number, products: any) => {
@@ -19,25 +19,7 @@ const CheckoutComponent = () => {
         // updateProduct()
     }, [])
 
-    const updateProduct = async () => {
-        var urlencoded = new URLSearchParams();
-        urlencoded.append("title", "1 1.07 Carat Radiant fef saf dsvd fdbfdb dsvfdsv");
-        urlencoded.append("productId", "7c2cdfe1-b2b2-4d21-a31a-60d5390f3afb");
-        var requestOptions :any= {
-            method: 'PATCH',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-                'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJlNjE5ZjlhOC00OWQ5LTQwYzItYTExMi1kYjczMTk2NzI2ZjIiLCJpYXQiOjE3MDUxMjI1MTQsImV4cCI6MTcwNTU1NDUxNH0.8vWEolFbvSMhLgQJN8NaPeUjJbuDx8uKpE2qltWzai8`
-            },
-            body: urlencoded,
-            redirect: 'follow'
-        };
-
-       await  fetch("http://192.168.0.171:8080/api/v1/product/update", requestOptions)
-            .then(response => response.text())
-            .then(result => console.log(result))
-            .catch(error => console.log('error', error));
-    }
+   
 
     return (
         <div className='container mx-auto'>
@@ -126,7 +108,7 @@ const CheckoutComponent = () => {
                         </div>
                         <div className="px-3 md:w-7/12 lg:pr-10">
                             {
-                                cartProduct?.map(prod => {
+                                cartProduct?.map((prod:any)=> {
                                     let product = prod?.product || prod
                                     console.log("🚀 ~ CheckoutComponent ~ product:", product)
                                     return (
