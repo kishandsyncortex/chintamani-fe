@@ -25,22 +25,31 @@ const Diamonds = () => {
   const { apiAction } = useApi()
 
   useEffect(() => {
+  }, [])
+
+
+  useEffect(() => {
     if (category?.length) {
+      window.scrollTo(0, 0)
       let currCategory = category?.[category?.length - 1]
+      if (currCategory?.id)
+        setFilter({ [`${currCategory?.name?.toLowerCase()}`]: currCategory?.id, page: currentPage, pageSize: limit })
+      else{
+        setFilter({ page: currentPage, pageSize: limit })
+      }
       // setFilter({ [`${currCategory?.name?.toLowerCase()}`]: currCategory?.id,mincarat:1,maxcarat:100 })
-      setFilter({ [`${currCategory?.name?.toLowerCase()}`]: currCategory?.id, page: currentPage, pageSize: limit })
 
     }
   }, [category])
 
-  
-  
+
+
   useEffect(() => {
     if (Object.keys(filter)?.length) {
       fetchProducts()
     }
   }, [filter])
-  
+
 
 
   const fetchProducts = async () => {

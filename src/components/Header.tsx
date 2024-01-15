@@ -384,9 +384,10 @@ const fetchWishlistData = async () => {
                           </ul>
                         </li>
 
-                        <li className="relative diamond list-none flex flex-col">
+                        <li className="relative diamond list-none flex flex-col" onClick={() => dispatch(setCategory([{name:"Shop",path:"Shop",id:"Shop"}]))}>
                           <Link
-                            to={"/shop"}
+                            to={"/product-category"}
+                            
                             className="py-5 px-[15px] text-sm border-t-[3px] border-transparent font-normal text-[#211c50] hover:bg-[#eee] hover:border-t-[3px] hover:border-[#211c50] flex items-center"
                           >
                             Shop
