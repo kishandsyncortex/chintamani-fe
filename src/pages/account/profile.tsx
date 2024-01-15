@@ -15,6 +15,10 @@ const Profile = () => {
         setFormData({ ...formData, [name]: value })
         setError({ ...error, [name]: "" })
     }
+const onAddress = () => {
+    
+}
+
     return (
         <div>
             <div className="px-5 pb-5">
