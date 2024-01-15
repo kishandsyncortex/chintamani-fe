@@ -41,7 +41,7 @@ const Diamonds = () => {
     if (Object.keys(filter)?.length) {
       fetchProducts()
     }
-  }, [filter])
+  }, [filter?.mincarat,filter?.maxcarat,filter?.maxprice,filter?.minprice,filter?.Color,filter?.Clarity,filter?.Cuts,filter?.page,filter?.pageSize])
 
 
 

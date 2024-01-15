@@ -33,6 +33,7 @@ import Forgotpassword from "./pages/auth/forgot-password";
 import ProductDetails from "./pages/Product/ProductDetails";
 import Checkout from "./pages/checkout";
 import Blogs from "./pages/Blog";
+import Faqs from "./pages/Faq";
 import Account from "./pages/account";
 import BlogDetails from "./pages/Blog/blogDetails";
 
@@ -75,6 +76,10 @@ const router = createBrowserRouter([
       {
         path: "blog",
         element: <Blogs />,
+      },
+      {
+        path: "faq",
+        element: <Faqs />,
       },
       {
         path: "account",
