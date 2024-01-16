@@ -4,7 +4,7 @@ const Index = () => {
     return (
         <div className='container mx-auto'>
 
-            <div className="flex flex-col">
+            <div className="flex flex-col mb-10">
 
                 <span className="self-center flex w-full max-w-[1490px] flex-col mt-24 max-md:max-w-full max-md:mt-10">
                     <div className="justify-center text-neutral-700 text-base font-semibold leading-6 self-center whitespace-nowrap">
@@ -1084,87 +1084,7 @@ const Index = () => {
                         Indian jurisdiction.
                     </div>
                 </span>{" "}
-                <div className="bg-indigo-950 self-stretch flex w-full flex-col justify-center items-center mt-24 px-16 py-9 max-md:max-w-full max-md:mt-10 max-md:px-5">
-                    <span className="flex w-[1060px] max-w-full items-stretch justify-between gap-5 max-md:flex-wrap">
-                        <div className="justify-center text-white text-xl font-medium leading-8 grow shrink basis-auto">
-                            Sign in for the latest Offer and deals
-                        </div>{" "}
-                        <span className="justify-between items-center rounded bg-white flex gap-5 mt-2 pl-4 self-start max-md:max-w-full max-md:flex-wrap">
-                            <div className="justify-center text-neutral-500 text-base my-auto">
-                                Enter your email address
-                            </div>{" "}
-                            <span className="justify-center text-indigo-950 text-center text-base font-medium leading-5 whitespace-nowrap items-stretch bg-white self-stretch aspect-[1.4615384615384615] pl-2.5 pr-4 py-3.5 rounded-none border-l-indigo-950 border-l border-solid">
-                                Join
-                            </span>
-                        </span>
-                    </span>
-                </div>{" "}
-                <div className="flex-col justify-center items-center overflow-hidden self-stretch relative flex min-h-[460px] w-full px-16 py-12 max-md:max-w-full max-md:px-5">
-                    <img
-                        loading="lazy"
-                        srcSet="https://cdn.builder.io/api/v1/image/assets/TEMP/20630c344459fa54f118be14ee06307c7ae4bf3eb5e4426f4fc4d2fd1ccf7a21?apiKey=dca3548985284f9d9826d506ef5b47bf&width=100 100w, https://cdn.builder.io/api/v1/image/assets/TEMP/20630c344459fa54f118be14ee06307c7ae4bf3eb5e4426f4fc4d2fd1ccf7a21?apiKey=dca3548985284f9d9826d506ef5b47bf&width=200 200w, https://cdn.builder.io/api/v1/image/assets/TEMP/20630c344459fa54f118be14ee06307c7ae4bf3eb5e4426f4fc4d2fd1ccf7a21?apiKey=dca3548985284f9d9826d506ef5b47bf&width=400 400w, https://cdn.builder.io/api/v1/image/assets/TEMP/20630c344459fa54f118be14ee06307c7ae4bf3eb5e4426f4fc4d2fd1ccf7a21?apiKey=dca3548985284f9d9826d506ef5b47bf&width=800 800w, https://cdn.builder.io/api/v1/image/assets/TEMP/20630c344459fa54f118be14ee06307c7ae4bf3eb5e4426f4fc4d2fd1ccf7a21?apiKey=dca3548985284f9d9826d506ef5b47bf&width=1200 1200w, https://cdn.builder.io/api/v1/image/assets/TEMP/20630c344459fa54f118be14ee06307c7ae4bf3eb5e4426f4fc4d2fd1ccf7a21?apiKey=dca3548985284f9d9826d506ef5b47bf&width=1600 1600w, https://cdn.builder.io/api/v1/image/assets/TEMP/20630c344459fa54f118be14ee06307c7ae4bf3eb5e4426f4fc4d2fd1ccf7a21?apiKey=dca3548985284f9d9826d506ef5b47bf&width=2000 2000w, https://cdn.builder.io/api/v1/image/assets/TEMP/20630c344459fa54f118be14ee06307c7ae4bf3eb5e4426f4fc4d2fd1ccf7a21?apiKey=dca3548985284f9d9826d506ef5b47bf&"
-                        className="absolute h-full w-full object-cover object-center inset-0"
-                    />{" "}
-                    <div className="relative flex w-[1060px] max-w-full flex-col items-stretch mt-9 mb-11 max-md:mb-10">
-                        <div className="max-md:max-w-full">
-                            <div className="gap-5 flex max-md:flex-col max-md:items-stretch max-md:gap-0">
-                                <div className="flex flex-col items-stretch w-[51%] max-md:w-full max-md:ml-0">
-                                    <img
-                                        loading="lazy"
-                                        srcSet="https://cdn.builder.io/api/v1/image/assets/TEMP/713fd24194d8cc3eed79201f9078c915872dd45b40941731b1b537c600d8ecd0?apiKey=dca3548985284f9d9826d506ef5b47bf&width=100 100w, https://cdn.builder.io/api/v1/image/assets/TEMP/713fd24194d8cc3eed79201f9078c915872dd45b40941731b1b537c600d8ecd0?apiKey=dca3548985284f9d9826d506ef5b47bf&width=200 200w, https://cdn.builder.io/api/v1/image/assets/TEMP/713fd24194d8cc3eed79201f9078c915872dd45b40941731b1b537c600d8ecd0?apiKey=dca3548985284f9d9826d506ef5b47bf&width=400 400w, https://cdn.builder.io/api/v1/image/assets/TEMP/713fd24194d8cc3eed79201f9078c915872dd45b40941731b1b537c600d8ecd0?apiKey=dca3548985284f9d9826d506ef5b47bf&width=800 800w, https://cdn.builder.io/api/v1/image/assets/TEMP/713fd24194d8cc3eed79201f9078c915872dd45b40941731b1b537c600d8ecd0?apiKey=dca3548985284f9d9826d506ef5b47bf&width=1200 1200w, https://cdn.builder.io/api/v1/image/assets/TEMP/713fd24194d8cc3eed79201f9078c915872dd45b40941731b1b537c600d8ecd0?apiKey=dca3548985284f9d9826d506ef5b47bf&width=1600 1600w, https://cdn.builder.io/api/v1/image/assets/TEMP/713fd24194d8cc3eed79201f9078c915872dd45b40941731b1b537c600d8ecd0?apiKey=dca3548985284f9d9826d506ef5b47bf&width=2000 2000w, https://cdn.builder.io/api/v1/image/assets/TEMP/713fd24194d8cc3eed79201f9078c915872dd45b40941731b1b537c600d8ecd0?apiKey=dca3548985284f9d9826d506ef5b47bf&"
-                                        className="aspect-[2.05] object-contain object-center w-full overflow-hidden mt-2.5 max-md:mt-10"
-                                    />
-                                </div>{" "}
-                                <div className="flex flex-col items-stretch w-[34%] ml-5 max-md:w-full max-md:ml-0">
-                                    <span className="flex grow flex-col items-stretch max-md:mt-10">
-                                        <div className="justify-center text-white text-xl font-medium leading-8">
-                                            Diamonds
-                                        </div>{" "}
-                                        <div className="justify-center text-white text-base leading-7 mt-3">
-                                            Natural Diamonds
-                                            <br />
-                                            Lab Grown Diamonds
-                                            <br />
-                                            Fancy Diamond
-                                            <br />
-                                            Moissanite Diamonds
-                                            <br />
-                                            Black Diamond
-                                        </div>
-                                    </span>
-                                </div>{" "}
-                                <div className="flex flex-col items-stretch w-[15%] ml-5 max-md:w-full max-md:ml-0">
-                                    <span className="flex grow flex-col items-stretch max-md:mt-10">
-                                        <div className="justify-center text-white text-xl font-medium leading-8">
-                                            Others
-                                        </div>{" "}
-                                        <div className="justify-center text-white text-base leading-7 mt-3">
-                                            Home
-                                            <br />
-                                            FAQ
-                                            <br />
-                                            Blog
-                                            <br />
-                                            Contact Us
-                                            <br />
-                                            Terms Conditions
-                                        </div>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>{" "}
-                        <span className="flex items-center justify-between gap-5 mt-16 max-md:max-w-full max-md:flex-wrap max-md:mt-10">
-                            <div className="justify-center text-white text-base leading-7 grow shrink basis-auto my-auto">
-                                Copy Right 2022 Chintamani Gems
-                            </div>{" "}
-                            <img
-                                loading="lazy"
-                                srcSet="https://cdn.builder.io/api/v1/image/assets/TEMP/f8c99cd199716eb86acc295992c6aa4baf7666a48cfe2625ba0a726b7e5e6dbf?apiKey=dca3548985284f9d9826d506ef5b47bf&width=100 100w, https://cdn.builder.io/api/v1/image/assets/TEMP/f8c99cd199716eb86acc295992c6aa4baf7666a48cfe2625ba0a726b7e5e6dbf?apiKey=dca3548985284f9d9826d506ef5b47bf&width=200 200w, https://cdn.builder.io/api/v1/image/assets/TEMP/f8c99cd199716eb86acc295992c6aa4baf7666a48cfe2625ba0a726b7e5e6dbf?apiKey=dca3548985284f9d9826d506ef5b47bf&width=400 400w, https://cdn.builder.io/api/v1/image/assets/TEMP/f8c99cd199716eb86acc295992c6aa4baf7666a48cfe2625ba0a726b7e5e6dbf?apiKey=dca3548985284f9d9826d506ef5b47bf&width=800 800w, https://cdn.builder.io/api/v1/image/assets/TEMP/f8c99cd199716eb86acc295992c6aa4baf7666a48cfe2625ba0a726b7e5e6dbf?apiKey=dca3548985284f9d9826d506ef5b47bf&width=1200 1200w, https://cdn.builder.io/api/v1/image/assets/TEMP/f8c99cd199716eb86acc295992c6aa4baf7666a48cfe2625ba0a726b7e5e6dbf?apiKey=dca3548985284f9d9826d506ef5b47bf&width=1600 1600w, https://cdn.builder.io/api/v1/image/assets/TEMP/f8c99cd199716eb86acc295992c6aa4baf7666a48cfe2625ba0a726b7e5e6dbf?apiKey=dca3548985284f9d9826d506ef5b47bf&width=2000 2000w, https://cdn.builder.io/api/v1/image/assets/TEMP/f8c99cd199716eb86acc295992c6aa4baf7666a48cfe2625ba0a726b7e5e6dbf?apiKey=dca3548985284f9d9826d506ef5b47bf&"
-                                className="aspect-[8.57] object-contain object-center w-[300px] overflow-hidden self-stretch"
-                            />
-                        </span>
-                    </div>
-                </div>
+              
             </div>
         </div>
     )

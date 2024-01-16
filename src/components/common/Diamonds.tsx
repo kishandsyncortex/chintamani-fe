@@ -12,6 +12,7 @@ const Diamonds = () => {
   const [totalRecords, setTotalRecords] = useState(0);
   const [limit] = useState(10);
   const [filter, setFilter] = useState<any>({});
+  console.log("🚀 ~ Diamonds ~ filter:", filter)
   const [products, setProducts] = useState([]);
   const { category: { category } } = useSelector((state: any) => state)
   // const { token, user } = useCheckPermission()
@@ -64,7 +65,7 @@ const Diamonds = () => {
           <div className="w-[80%] flex flex-col flex-nowrap items-start p-[20px] pr-[0]">
             <div className="w-full">
               <p className="py-[8px] text-base font-poppins font-normal text-[#404040] mb-[16px] float-left">
-                showing {totalRecords ? limit * (filter?.page||1) - 9 : 0}-{(limit * (filter?.page||1) < totalRecords ? limit * (filter?.page||1) : totalRecords) ?? 0} of {totalRecords ?? 0} results
+                showing {totalRecords ?  (filter?.page||1)  : 0}-{(Math.ceil(totalRecords / limit)) ?? 0} of {totalRecords ?? 0} results
 
               </p>
               <form action="" className="float-right mb-[16px] relative">
