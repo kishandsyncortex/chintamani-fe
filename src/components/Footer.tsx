@@ -58,15 +58,15 @@ const Footer: FC = () => {
           </div>
         </div>
       </div>
-      <footer className="relative z-0 bg-[url('../../public/assests/Images/BgFooter.png')] after:bg-[#000] after:-z-[1] after:absolute after:top-0 after:left-0 after:opacity-[0.7] after:w-full after:h-full bg-no-repeat w-full bg-cover h-full sm:h-[350px] flex items-center">
+      <footer className="relative z-0 bg-[url('../../public/assests/Images/BgFooter.png')] after:bg-[#000] after:-z-[1] after:absolute after:top-0 after:left-0 after:opacity-[0.7] after:w-full after:h-full bg-no-repeat w-full bg-cover h-full sm:h-full flex items-center">
         <div className="container mx-auto">
-          <div className="flex sm:items-center justify-between md:max-w-[70%] max-w-full md:mx-auto sm:flex-row flex-col items-start mb-6">
-            <div>
+          <div className="lg:flex md:block block sm:items-center justify-between mb-6 lg:text-start md:text-center text-center lg:pt-[75px] lg:pb-[40px]">
+            <div className="lg:mt-0 md:mt-[116px] mt-[116px] lg:pb-[0] md:pb-[40px] pb-[40px]">
               <Link to={""}>
-                <img src={footerLogo} alt="footerLogo" className="w-[300px]" />
+                <img src={footerLogo} alt="footerLogo" className="w-[300px] md:mx-auto mx-auto" />
               </Link>
             </div>
-            <div className="sm:mb-0 mb-[10px] text-[#fff]">
+            <div className="sm:mb-0 mb-[10px] text-[#fff] lg:pb-[0] md:pb-[40px] pb-[40px]">
 
               {categories?.map((category: any) => {
                 return (
@@ -103,7 +103,7 @@ const Footer: FC = () => {
                 </li>
               </ul> */}
             </div>
-            <div className="text-[#fff]">
+            <div className="text-[#fff] lg:pb-[0] md:pb-[40px] pb-[40px]">
               <h3 className="text-xl font-medium mb-4">Others</h3>
               <ul className="text-[15px] flex flex-col gap-1">
                 <li>
@@ -124,15 +124,15 @@ const Footer: FC = () => {
               </ul>
             </div>
           </div>
-          <div className="flex sm:items-center sm:flex-row justify-between flex-col md:max-w-[70%] max-w-full md:mx-auto text-[#fff]">
-            <div className="text-[15px] font-poppins font-normal mb-3">
+          <div className="lg:flex md:block block text-center flex-wrap items-center justify-between text-[#fff] pb-[75px]">
+            <div className="text-[15px] font-poppins font-normal lg:pb-0 md:pb-[40px] pb-[40px]">
               Copy Right 2022 Chintamani Gems
             </div>
-            <div>
+            <div className="lg:mx-0 md:mx-auto mx-auto">
               <img
                 src={Payment}
                 alt="Payment"
-                className="sm:w-[200px] w-[150px]"
+                className="w-[300px] lg:mx-0 md:mx-auto mx-auto"
               />
             </div>
           </div>

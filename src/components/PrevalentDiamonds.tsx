@@ -1,6 +1,5 @@
 import { FC, useEffect, useState } from "react";
 import KImg from "../../public/assests/Images/k.png";
-
 import { Link, useNavigate } from "react-router-dom";
 import useApi from "@/hooks/useApi";
 import { apiPath } from "@/lib/api-path";
@@ -9,7 +8,6 @@ import { useDispatch } from "react-redux";
 import { setCategory } from "@/redux/reducer/category";
 
 const PrevalentDiamonds: FC = () => {
-
   const { apiAction } = useApi()
   const [shapes, setShapes] = useState([])
   const dispatch = useDispatch()
@@ -23,8 +21,6 @@ const PrevalentDiamonds: FC = () => {
     setShapes(data?.data?.Shapedata)
   }
 
-
-
   return (
     <section className="w-full bg-cover mt-[25px]">
       <div className="py-[54px] flex flex-col items-start px-5 container">
@@ -35,23 +31,24 @@ const PrevalentDiamonds: FC = () => {
           <img src={KImg} alt="KImg" className="max-w-[100%]" />
         </div>
         <div className="mt-[40px] hidden"></div>
-        <div className="pt-[30px] flex w-full lg:flex-row flex-row items-stretch justify-center flex-wrap">
+        <div className="pt-[30px] flex w-full lg:flex-row flex-row items-stretch justify-center flex-wrap gap-4">
           {shapes?.map((shape: shapeType) => {
             return (
-              <Link
-                to={"#"}
-                onClick={()=>{dispatch(setCategory([{path:"Shape"},{path:shape?.name,name:"shape",id:shape?.name}]))
-                navigate("/product-category")
-              }}
-                // to={`/shape/${shape?._id}`}
-                className="lg:w-[11%] md:w-[26%] w-[33.33%] flex items-center text-center px-[15px] flex-wrap flex-col justify-center decoration-none"
-              >
-                <img src={shape?.image} alt="shapeImg" className="max-w-[100%]" />
-                <h6 className="text-base font-normal">{shape?.name}</h6>
-              </Link>
+              <div className="lg:w-[9.5%] md:w-[17.5%] w-[29%] flex flex-col items-center mb-2.5" key={shape?.name}>
+                <Link
+                  to={"#"}
+                  onClick={() => {
+                    dispatch(setCategory([{ path: "Shape" }, { path: shape?.name, name: "shape", id: shape?.name }]))
+                    navigate("/product-category")
+                  }}
+                  className="text-center"
+                >
+                  <img src={shape?.image} alt="shapeImg" className="max-w-full h-[72px]" />
+                  <h6 className="text-base font-normal pt-2">{shape?.name}</h6>
+                </Link>
+              </div>
             )
           })}
-
         </div>
       </div>
     </section>
